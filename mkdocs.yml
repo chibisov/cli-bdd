@@ -1,0 +1,10 @@
+site_name: BDD for command-line applications
+theme: readthedocs
+markdown_extensions:
+    - markdown_include.include
+    - admonition
+    - toc:
+        anchorlink: True
+pages:
+- Home: index.md
+- Development: development.md

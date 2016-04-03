@@ -1,0 +1,3 @@
+[run]
+include=cli_bdd/*
+omit=cli_bdd/six.py
