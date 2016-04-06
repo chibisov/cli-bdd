@@ -31,9 +31,9 @@ class CommandStepsMixin(object):
 
         self.execute_module_step(
             'run_command',
-            args=[
-                'echo "hello" > %s' % file_path,
-            ]
+            kwargs={
+                'command': 'echo "hello" > %s' % file_path,
+            }
         )
         assert_that(open(file_path).read(), equal_to('hello\n'))
 
@@ -41,18 +41,18 @@ class CommandStepsMixin(object):
         # no error
         self.execute_module_step(
             'successfully_run_command',
-            args=[
-                'echo "hello"',
-            ]
+            kwargs={
+                'command': 'echo "hello"',
+            }
         )
 
         # with error
         try:
             self.execute_module_step(
                 'successfully_run_command',
-                args=[
-                    'cat /',
-                ]
+                kwargs={
+                    'command': 'cat /',
+                }
             )
         except Exception as e:
             assert_that(
@@ -67,9 +67,9 @@ class CommandStepsMixin(object):
 
         context = self.execute_module_step(
             'run_command_interactively',
-            args=[
-                'rm -i %s' % file_path,
-            ]
+            kwargs={
+                'command': 'rm -i %s' % file_path,
+            }
         )
 
         # file should not be removed yet
@@ -88,9 +88,9 @@ class CommandStepsMixin(object):
 
         context = self.execute_module_step(
             'run_command_interactively',
-            args=[
-                'rm -i %s' % file_path,
-            ]
+            kwargs={
+                'command': 'rm -i %s' % file_path,
+            }
         )
 
         # file should not be removed yet
@@ -100,9 +100,9 @@ class CommandStepsMixin(object):
         new_context = self.execute_module_step(
             'type_into_command',
             context=context,
-            args=[
-                'Y',
-            ]
+            kwargs={
+                'input_': 'Y',
+            }
         )
 
         # file should be removed
@@ -119,9 +119,9 @@ class CommandStepsMixin(object):
         self.execute_module_step(
             'output_should_contain_text',
             context=context,
-            args=[
-                'output',
-            ],
+            kwargs={
+                'output': 'output',
+            },
             text='ell'
         )
 
@@ -130,11 +130,10 @@ class CommandStepsMixin(object):
             self.execute_module_step(
                 'output_should_contain_text',
                 context=context,
-                args=[
-                    'output',
-                    '',
-                    'exactly'
-                ],
+                kwargs={
+                    'output': 'output',
+                    'exactly': True
+                },
                 text='ell'
             )
         except AssertionError as e:
@@ -147,10 +146,10 @@ class CommandStepsMixin(object):
             self.execute_module_step(
                 'output_should_contain_text',
                 context=context,
-                args=[
-                    'output',
-                    'not'
-                ],
+                kwargs={
+                    'output': 'output',
+                    'should_not': 'not'
+                },
                 text='ell'
             )
         except AssertionError as e:
@@ -162,11 +161,40 @@ class CommandStepsMixin(object):
         self.execute_module_step(
             'output_should_contain_text',
             context=context,
-            args=[
-                'stderr',
-            ],
+            kwargs={
+                'output': 'stderr',
+            },
             text='rld'
         )
+
+    def test_exit_status_should_be(self):
+        context = Mock()
+        context.command_response = {
+            'returncode': 1,
+        }
+
+        self.execute_module_step(
+            'exit_status_should_be',
+            context=context,
+            kwargs={
+                'exit_status': '1'
+            }
+        )
+
+        # stdout doesn't contain exact text
+        try:
+            self.execute_module_step(
+                'exit_status_should_be',
+                context=context,
+                kwargs={
+                    'should_not': 'not',
+                    'exit_status': '1'
+                }
+            )
+        except AssertionError as e:
+            pass
+        else:
+            raise AssertionError("exit status equals 1")
 
 
 class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
@@ -176,7 +204,9 @@ class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
             {
                 'value': 'I run `sosisa`',
                 'expected': {
-                    'args': ('sosisa',)
+                    'kwargs': {
+                        'command': 'sosisa'
+                    }
                 }
             }
         ],
@@ -184,7 +214,9 @@ class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
             {
                 'value': 'I successfully run `sosisa`',
                 'expected': {
-                    'args': ('sosisa',)
+                    'kwargs': {
+                        'command': 'sosisa'
+                    }
                 }
             }
         ],
@@ -192,7 +224,9 @@ class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
             {
                 'value': 'I run `sosisa` interactively',
                 'expected': {
-                    'args': ('sosisa',)
+                    'kwargs': {
+                        'command': 'sosisa'
+                    }
                 }
             }
         ],
@@ -200,52 +234,33 @@ class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
             {
                 'value': 'I type "sosisa"',
                 'expected': {
-                    'args': ('sosisa',)
+                    'kwargs': {
+                        'input_': 'sosisa'
+                    }
                 }
             }
         ],
+        'exit_status_should_be': [
+            {
+                'value': 'the exit status should be 1',
+                'expected': {
+                    'kwargs': {
+                        'should_not': None,
+                        'exit_status': '1'
+                    }
+                }
+            },
+            {
+                'value': 'the exit status should not be 2',
+                'expected': {
+                    'kwargs': {
+                        'should_not': 'not',
+                        'exit_status': '2'
+                    }
+                }
+            }
+        ]
     }
-#         'append_to_the_environment_variable': [
-#             {
-#                 'value': 'I append "polina" to the environment variable "sosisa"',
-#                 'expected': {
-#                     'args': ('polina', 'sosisa')
-#                 }
-#             }
-#         ],
-#         'prepend_to_the_environment_variable': [
-#             {
-#                 'value': 'I prepend "polina" to the environment variable "sosisa"',
-#                 'expected': {
-#                     'args': ('polina', 'sosisa')
-#                 }
-#             }
-#         ],
-#         'set_the_environment_variables': [
-#             {
-#                 'value': 'I set the environment variables to:',
-#                 'expected': {
-#                     'args': tuple()
-#                 },
-#             }
-#         ],
-#         'append_the_values_to_the_environment_variables': [
-#             {
-#                 'value': 'I append the values to the environment variables:',
-#                 'expected': {
-#                     'args': tuple()
-#                 },
-#             }
-#         ],
-#         'prepend_the_values_to_the_environment_variables': [
-#             {
-#                 'value': 'I prepend the values to the environment variables:',
-#                 'expected': {
-#                     'args': tuple()
-#                 },
-#             }
-#         ],
-#     }
 
 
 class TestCommandBehaveSteps(BehaveStepsTestMixin,

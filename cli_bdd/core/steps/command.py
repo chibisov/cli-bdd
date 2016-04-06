@@ -39,16 +39,24 @@ def run(command, fail_on_error=False, interactively=False):
 
 
 class RunCommand(StepBase):
+    """
+    Examples:
+        When I run `echo hello`
+    """
     type_ = 'when'
-    sentence = 'I run `([^`]*)`'
+    sentence = 'I run `(?P<command>[^`]*)`'
 
     def step(self, command):
         self.get_scenario_context().command_response = run(command)
 
 
 class SuccessfullyRunCommand(StepBase):
+    """
+    Examples:
+        When I successfully run `echo hello`
+    """
     type_ = 'when'
-    sentence = 'I successfully run `(.*?)`'  # todo: with timeout
+    sentence = 'I successfully run `(?P<command>.*)`'  # todo: with timeout
 
     def step(self, command):
         self.get_scenario_context().command_response = run(
@@ -58,8 +66,12 @@ class SuccessfullyRunCommand(StepBase):
 
 
 class RunCommandInteractively(StepBase):
+    """
+    Examples:
+        When I run `rm -i hello.txt` interactively
+    """
     type_ = 'when'
-    sentence = 'I run `([^`]*)` interactively'
+    sentence = 'I run `(?P<command>[^`]*)` interactively'
 
     def step(self, command):
         self.get_scenario_context().command_response = run(
@@ -69,8 +81,12 @@ class RunCommandInteractively(StepBase):
 
 
 class TypeIntoCommand(StepBase):
+    """
+    Examples:
+        When I type "Yes"
+    """
     type_ = 'when'
-    sentence = 'I type "([^"]*)"'
+    sentence = 'I type "(?P<input_>[^"]*)"'
 
     def step(self, input_):
         response = self.get_scenario_context().command_response['communicate'](
@@ -83,8 +99,28 @@ class TypeIntoCommand(StepBase):
 
 
 class OutputShouldContainText(StepBase):
+    '''
+    Examples:
+        Then the the output should contain:
+            """
+            hello
+            """
+
+        Then the output should contain exactly:
+            """
+            hello
+            """
+
+        Then the stderr should not contain exactly:
+            """
+            hello
+            """
+    '''
     type_ = 'then'
-    sentence = 'the (output|stderr|stdout) should( not)? contain( exactly)?:'
+    sentence = (
+        'the (?P<output>(output|stderr|stdout)) '
+        'should( (?P<should_not>not))? contain( (?P<exactly>exactly))?:'
+    )
 
     def step(self, output, should_not=False, exactly=False):
         output = 'stdout' if output == 'output' else output
@@ -99,10 +135,34 @@ class OutputShouldContainText(StepBase):
         )
 
 
+class ExitStatusShouldBe(StepBase):
+    """
+    Examples:
+        Then the exit status should be 1
+        Then the exit status should not be 1
+    """
+    type_ = 'then'
+    sentence = (
+        'the exit status should( (?P<should_not>not))? '
+        'be (?P<exit_status>\d+)'
+    )
+
+    def step(self, should_not=False, exit_status=None):
+        exit_status = int(exit_status)
+        bool_matcher = is_not if should_not else is_
+        assert_that(
+            self.get_scenario_context().command_response['returncode'],
+            bool_matcher(
+                equal_to(exit_status)
+            )
+        )
+
+
 base_steps = {
     'run_command': RunCommand,
     'successfully_run_command': SuccessfullyRunCommand,
     'run_command_interactively': RunCommandInteractively,
     'type_into_command': TypeIntoCommand,
     'output_should_contain_text': OutputShouldContainText,
+    'exit_status_should_be': ExitStatusShouldBe
 }

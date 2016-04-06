@@ -25,14 +25,21 @@ class StepsSentenceRegexTestMixin(object):
             sentence = self.steps[step_func_name].sentence
             for exp in step_exp:
                 result = re.search(sentence, exp['value'])
-                assert_that(result.groups(), equal_to(exp['expected']['args']))
+                assert_that(
+                    result.groupdict(),
+                    equal_to(exp['expected']['kwargs']),
+                    {
+                        'value': exp['value'],
+                        'sentence': sentence
+                    }
+                )
 
 
 class StepsTestMixin(object):
     module = None
     root_module = None
 
-    def execute_module_step(self, name, context=None, args=[], table=[], text=None):
+    def execute_module_step(self, name, context=None, kwargs={}, table=[], text=None):
         assert_that(
             getattr(self.module, name),
             equal_to(getattr(self.root_module, name))
@@ -41,12 +48,12 @@ class StepsTestMixin(object):
         return self._execute_module_step(
             name,
             context=context,
-            args=args,
+            kwargs=kwargs,
             table=table,
             text=text,
         )
 
-    def _execute_module_step(self, name, context, args, table, text):
+    def _execute_module_step(self, name, context, kwargs, table, text):
         raise NotImplementedError()
 
 
@@ -54,10 +61,10 @@ class BehaveStepsTestMixin(StepsTestMixin):
     module = None
     root_module = behave_steps_root_module
 
-    def _execute_module_step(self, name, context, args, table, text):
+    def _execute_module_step(self, name, context, kwargs, table, text):
         context.table = table
         context.text = text
-        getattr(self.module, name)(context, *args)
+        getattr(self.module, name)(context, **kwargs)
         return context
 
 
@@ -65,11 +72,11 @@ class LettuceStepsTestMixin(StepsTestMixin):
     module = None
     root_module = lettuce_steps_root_module
 
-    def _execute_module_step(self, name, context, args, table, text):
+    def _execute_module_step(self, name, context, kwargs, table, text):
         step_context = Mock()
         step_context.hashes = table
         step_context.multiline = text
 
         with patch.object(LettuceStepMixin, 'get_scenario_context', lambda self: context):
-            getattr(self.module, name)(step_context, *args)
+            getattr(self.module, name)(step_context, **kwargs)
         return context

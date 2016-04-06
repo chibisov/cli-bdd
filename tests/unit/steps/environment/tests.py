@@ -32,10 +32,10 @@ class EnvironmentStepsMixin(object):
         assert_that('hello' in os.environ, equal_to(False))
         self.execute_module_step(
             'set_the_environment_variable',
-            args=[
-                'hello',
-                'world'
-            ]
+            kwargs={
+                'variable': 'hello',
+                'value': 'world'
+            }
         )
         assert_that(os.environ.get('hello'), equal_to('world'))
 
@@ -45,20 +45,20 @@ class EnvironmentStepsMixin(object):
         # no env variable
         self.execute_module_step(
             'append_to_the_environment_variable',
-            args=[
-                'hello',
-                'world'
-            ]
+            kwargs={
+                'variable': 'hello',
+                'value': 'world'
+            }
         )
         assert_that(os.environ.get('hello'), equal_to('world'))
 
         # with env variable
         self.execute_module_step(
             'append_to_the_environment_variable',
-            args=[
-                'hello',
-                'amigo'
-            ]
+            kwargs={
+                'variable': 'hello',
+                'value': 'amigo'
+            }
         )
         assert_that(os.environ.get('hello'), equal_to('worldamigo'))
 
@@ -68,20 +68,20 @@ class EnvironmentStepsMixin(object):
         # no env variable
         self.execute_module_step(
             'prepend_to_the_environment_variable',
-            args=[
-                'hello',
-                'world'
-            ]
+            kwargs={
+                'variable': 'hello',
+                'value': 'world'
+            }
         )
         assert_that(os.environ.get('hello'), equal_to('world'))
 
         # with env variable
         self.execute_module_step(
             'prepend_to_the_environment_variable',
-            args=[
-                'hello',
-                'amigo'
-            ]
+            kwargs={
+                'variable': 'hello',
+                'value': 'amigo'
+            }
         )
         assert_that(os.environ.get('hello'), equal_to('amigoworld'))
 
@@ -214,23 +214,32 @@ class TestEnvironmentStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
             {
                 'value': 'I set the environment variable "polina" to "sosisa"',
                 'expected': {
-                    'args': ('polina', 'sosisa')
+                    'kwargs': {
+                        'variable': 'polina',
+                        'value': 'sosisa'
+                    }
                 }
             }
         ],
         'append_to_the_environment_variable': [
             {
-                'value': 'I append "polina" to the environment variable "sosisa"',
+                'value': 'I append "sosisa" to the environment variable "polina"',
                 'expected': {
-                    'args': ('polina', 'sosisa')
+                    'kwargs': {
+                        'variable': 'polina',
+                        'value': 'sosisa'
+                    }
                 }
             }
         ],
         'prepend_to_the_environment_variable': [
             {
-                'value': 'I prepend "polina" to the environment variable "sosisa"',
+                'value': 'I prepend "sosisa" to the environment variable "polina"',
                 'expected': {
-                    'args': ('polina', 'sosisa')
+                    'kwargs': {
+                        'variable': 'polina',
+                        'value': 'sosisa'
+                    }
                 }
             }
         ],
@@ -238,7 +247,7 @@ class TestEnvironmentStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
             {
                 'value': 'I set the environment variables to:',
                 'expected': {
-                    'args': tuple()
+                    'kwargs': {}
                 },
             }
         ],
@@ -246,7 +255,7 @@ class TestEnvironmentStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
             {
                 'value': 'I append the values to the environment variables:',
                 'expected': {
-                    'args': tuple()
+                    'kwargs': {}
                 },
             }
         ],
@@ -254,7 +263,7 @@ class TestEnvironmentStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
             {
                 'value': 'I prepend the values to the environment variables:',
                 'expected': {
-                    'args': tuple()
+                    'kwargs': {}
                 },
             }
         ],

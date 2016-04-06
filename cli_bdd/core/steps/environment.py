@@ -20,30 +20,58 @@ def _prepend_to_the_environment_variable(variable, value):
 
 
 class SetTheEnvironmentVariableBase(StepBase):
+    """
+    Examples:
+        Given I set the environment variable "hello" to "world"
+    """
     type_ = 'given'
-    sentence = 'I set the environment variable "(.*)" to "(.*)"'
+    sentence = (
+        'I set the environment variable "(?P<variable>.*)" '
+        'to "(?P<value>.*)"'
+    )
 
     def step(self, variable, value):
         os.environ[variable] = value
 
 
 class AppendToTheEnvironmentVariable(StepBase):
+    """
+    Examples:
+        Given I append "world" to the environment variable "hello"
+    """
     type_ = 'given'
-    sentence = 'I append "(.*)" to the environment variable "(.*)"'
+    sentence = (
+        'I append "(?P<value>.*)" '
+        'to the environment variable "(?P<variable>.*)"'
+    )
 
-    def step(self, variable, value):
+    def step(self, value, variable):
         _append_to_the_environment_variable(variable, value)
 
 
 class PrependToTheEnvironmentVariable(StepBase):
+    """
+    Examples:
+        Given I prepend "world" to the environment variable "hello"
+    """
     type_ = 'given'
-    sentence = 'I prepend "(.*)" to the environment variable "(.*)"'
+    sentence = (
+        'I prepend "(?P<value>.*)" '
+        'to the environment variable "(?P<variable>.*)"'
+    )
 
-    def step(self, variable, value):
+    def step(self, value, variable):
         _prepend_to_the_environment_variable(variable, value)
 
 
 class SetTheEnvironmentVariables(StepBase):
+    """
+    Examples:
+        Given I set the environment variables to:
+            | variable | value |
+            | age      | 25    |
+            | name     | gena  |
+    """
     type_ = 'given'
     sentence = 'I set the environment variables to:'
 
@@ -53,6 +81,13 @@ class SetTheEnvironmentVariables(StepBase):
 
 
 class AppendTheValuesToTheEnvironmentVariables(StepBase):
+    """
+    Examples:
+        I append the values to the environment variables:
+            | variable | value |
+            | age      | 1     |
+            | name     | a     |
+    """
     type_ = 'given'
     sentence = 'I append the values to the environment variables:'
 
@@ -65,6 +100,13 @@ class AppendTheValuesToTheEnvironmentVariables(StepBase):
 
 
 class PrependTheValuesToTheEnvironmentVariables(StepBase):
+    """
+    Examples:
+        I prepend the values to the environment variables:
+            | variable | value |
+            | age      | 1     |
+            | name     | a     |
+    """
     type_ = 'given'
     sentence = 'I prepend the values to the environment variables:'
 
