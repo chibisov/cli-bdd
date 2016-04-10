@@ -20,9 +20,13 @@ def _prepend_to_the_environment_variable(variable, value):
 
 
 class SetTheEnvironmentVariableBase(StepBase):
-    """
+    """Sets the environment variable.
+
     Examples:
-        Given I set the environment variable "hello" to "world"
+
+    ```gherkin
+    Given I set the environment variable "hello" to "world"
+    ```
     """
     type_ = 'given'
     sentence = (
@@ -35,9 +39,13 @@ class SetTheEnvironmentVariableBase(StepBase):
 
 
 class AppendToTheEnvironmentVariable(StepBase):
-    """
+    """Appends a value to the environment variable.
+
     Examples:
-        Given I append "world" to the environment variable "hello"
+
+    ```gherkin
+    Given I append "world" to the environment variable "hello"
+    ```
     """
     type_ = 'given'
     sentence = (
@@ -50,9 +58,13 @@ class AppendToTheEnvironmentVariable(StepBase):
 
 
 class PrependToTheEnvironmentVariable(StepBase):
-    """
+    """Prepends a value to the environment variable.
+
     Examples:
-        Given I prepend "world" to the environment variable "hello"
+
+    ```gherkin
+    Given I prepend "world" to the environment variable "hello"
+    ```
     """
     type_ = 'given'
     sentence = (
@@ -65,12 +77,16 @@ class PrependToTheEnvironmentVariable(StepBase):
 
 
 class SetTheEnvironmentVariables(StepBase):
-    """
+    """Populates the set of the environment variables.
+
     Examples:
-        Given I set the environment variables to:
-            | variable | value |
-            | age      | 25    |
-            | name     | gena  |
+
+    ```gherkin
+    Given I set the environment variables to:
+        | variable | value |
+        | age      | 25    |
+        | name     | gena  |
+    ```
     """
     type_ = 'given'
     sentence = 'I set the environment variables to:'
@@ -81,12 +97,15 @@ class SetTheEnvironmentVariables(StepBase):
 
 
 class AppendTheValuesToTheEnvironmentVariables(StepBase):
-    """
+    """Appends the values to the set of the environment variables.
+
     Examples:
-        I append the values to the environment variables:
-            | variable | value |
-            | age      | 1     |
-            | name     | a     |
+    ```gherkin
+    I append the values to the environment variables:
+        | variable | value |
+        | age      | 1     |
+        | name     | a     |
+    ```
     """
     type_ = 'given'
     sentence = 'I append the values to the environment variables:'
@@ -100,12 +119,16 @@ class AppendTheValuesToTheEnvironmentVariables(StepBase):
 
 
 class PrependTheValuesToTheEnvironmentVariables(StepBase):
-    """
+    """Prepends the values to the set of the environment variables.
+
     Examples:
-        I prepend the values to the environment variables:
-            | variable | value |
-            | age      | 1     |
-            | name     | a     |
+
+    ```gherkin
+    I prepend the values to the environment variables:
+        | variable | value |
+        | age      | 1     |
+        | name     | a     |
+    ```
     """
     type_ = 'given'
     sentence = 'I prepend the values to the environment variables:'
@@ -118,11 +141,29 @@ class PrependTheValuesToTheEnvironmentVariables(StepBase):
             )
 
 
-base_steps = {
-    'set_the_environment_variable': SetTheEnvironmentVariableBase,
-    'append_to_the_environment_variable': AppendToTheEnvironmentVariable,
-    'prepend_to_the_environment_variable': PrependToTheEnvironmentVariable,
-    'set_the_environment_variables': SetTheEnvironmentVariables,
-    'append_the_values_to_the_environment_variables': AppendTheValuesToTheEnvironmentVariables,
-    'prepend_the_values_to_the_environment_variables': PrependTheValuesToTheEnvironmentVariables,
-}
+base_steps = [
+    {
+        'func_name': 'set_the_environment_variable',
+        'class': SetTheEnvironmentVariableBase,
+    },
+    {
+        'func_name': 'append_to_the_environment_variable',
+        'class': AppendToTheEnvironmentVariable,
+    },
+    {
+        'func_name': 'prepend_to_the_environment_variable',
+        'class': PrependToTheEnvironmentVariable,
+    },
+    {
+        'func_name': 'set_the_environment_variables',
+        'class': SetTheEnvironmentVariables,
+    },
+    {
+        'func_name': 'append_the_values_to_the_environment_variables',
+        'class': AppendTheValuesToTheEnvironmentVariables,
+    },
+    {
+        'func_name': 'prepend_the_values_to_the_environment_variables',
+        'class': PrependTheValuesToTheEnvironmentVariables,
+    },
+]

@@ -13,11 +13,15 @@ from cli_bdd.core.steps.base import StepBase
 
 
 class CopyFileOrDirectory(StepBase):
-    """
+    """Copies a file or directory.
+
     Examples:
-        Given I copy a file from "/tmp/old.txt" to "/var/new.txt"
-        Given I copy the file named "hello.txt" to "/var/"
-        Given I copy a directory from "/tmp/hello/" to "/var/"
+
+    ```gherkin
+    Given I copy a file from "/tmp/old.txt" to "/var/new.txt"
+    Given I copy the file named "hello.txt" to "/var/"
+    Given I copy a directory from "/tmp/hello/" to "/var/"
+    ```
     """
     type_ = 'given'
     sentence = (
@@ -33,11 +37,15 @@ class CopyFileOrDirectory(StepBase):
 
 
 class MoveFileOrDirectory(StepBase):
-    """
+    """Moves a file or directory.
+
     Examples:
-        Given I move a file from "/tmp/old.txt" to "/var/new.txt"
-        Given I move the file named "hello.txt" to "/var/"
-        Given I move a directory from "/tmp/hello/" to "/var/"
+
+    ```gherkin
+    Given I move a file from "/tmp/old.txt" to "/var/new.txt"
+    Given I move the file named "hello.txt" to "/var/"
+    Given I move a directory from "/tmp/hello/" to "/var/"
+    ```
     """
     type_ = 'given'
     sentence = (
@@ -50,10 +58,14 @@ class MoveFileOrDirectory(StepBase):
 
 
 class CreateDirectory(StepBase):
-    """
+    """Creates directory.
+
     Examples:
-        Given a directory "/tmp/test/"
-        Given the directory named "/tmp/test/"
+
+    ```gherkin
+    Given a directory "/tmp/test/"
+    Given the directory named "/tmp/test/"
+    ```
     """
     type_ = 'given'
     sentence = (
@@ -66,8 +78,17 @@ class CreateDirectory(StepBase):
             os.makedirs(dir_path)
 
 
-base_steps = {
-    'copy_file_or_directory': CopyFileOrDirectory,
-    'move_file_or_directory': MoveFileOrDirectory,
-    'create_directory': CreateDirectory,
-}
+base_steps = [
+    {
+        'func_name': 'copy_file_or_directory',
+        'class': CopyFileOrDirectory
+    },
+    {
+        'func_name': 'move_file_or_directory',
+        'class': MoveFileOrDirectory
+    },
+    {
+        'func_name': 'create_directory',
+        'class': CreateDirectory
+    },
+]

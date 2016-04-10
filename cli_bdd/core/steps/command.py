@@ -39,9 +39,13 @@ def run(command, fail_on_error=False, interactively=False):
 
 
 class RunCommand(StepBase):
-    """
+    """Runs a command.
+
     Examples:
-        When I run `echo hello`
+
+    ```gherkin
+    When I run `echo hello`
+    ```
     """
     type_ = 'when'
     sentence = 'I run `(?P<command>[^`]*)`'
@@ -51,9 +55,14 @@ class RunCommand(StepBase):
 
 
 class SuccessfullyRunCommand(StepBase):
-    """
+    """Runs a command and checks it for successfull status.
+
+
     Examples:
-        When I successfully run `echo hello`
+
+    ```gherkin
+    When I successfully run `echo hello`
+    ```
     """
     type_ = 'when'
     sentence = 'I successfully run `(?P<command>.*)`'  # todo: with timeout
@@ -66,9 +75,13 @@ class SuccessfullyRunCommand(StepBase):
 
 
 class RunCommandInteractively(StepBase):
-    """
+    """Runs a command in interactive mode.
+
     Examples:
-        When I run `rm -i hello.txt` interactively
+
+    ```gherkin
+    When I run `rm -i hello.txt` interactively
+    ```
     """
     type_ = 'when'
     sentence = 'I run `(?P<command>[^`]*)` interactively'
@@ -81,9 +94,13 @@ class RunCommandInteractively(StepBase):
 
 
 class TypeIntoCommand(StepBase):
-    """
+    """Types an input into the previously ran in interactive mode command.
+
     Examples:
-        When I type "Yes"
+
+    ```gherkin
+    When I type "Yes"
+    ```
     """
     type_ = 'when'
     sentence = 'I type "(?P<input_>[^"]*)"'
@@ -99,22 +116,26 @@ class TypeIntoCommand(StepBase):
 
 
 class OutputShouldContainText(StepBase):
-    '''
+    '''Checks the command output (stdout, stderr).
+
     Examples:
-        Then the the output should contain:
-            """
-            hello
-            """
 
-        Then the output should contain exactly:
-            """
-            hello
-            """
+    ```gherkin
+    Then the the output should contain:
+        """
+        hello
+        """
 
-        Then the stderr should not contain exactly:
-            """
-            hello
-            """
+    Then the output should contain exactly:
+        """
+        hello
+        """
+
+    Then the stderr should not contain exactly:
+        """
+        hello
+        """
+    ```
     '''
     type_ = 'then'
     sentence = (
@@ -136,10 +157,14 @@ class OutputShouldContainText(StepBase):
 
 
 class ExitStatusShouldBe(StepBase):
-    """
+    """Checks the command status code.
+
     Examples:
-        Then the exit status should be 1
-        Then the exit status should not be 1
+
+    ```gherkin
+    Then the exit status should be 1
+    Then the exit status should not be 1
+    ```
     """
     type_ = 'then'
     sentence = (
@@ -158,11 +183,29 @@ class ExitStatusShouldBe(StepBase):
         )
 
 
-base_steps = {
-    'run_command': RunCommand,
-    'successfully_run_command': SuccessfullyRunCommand,
-    'run_command_interactively': RunCommandInteractively,
-    'type_into_command': TypeIntoCommand,
-    'output_should_contain_text': OutputShouldContainText,
-    'exit_status_should_be': ExitStatusShouldBe
-}
+base_steps = [
+    {
+        'func_name': 'run_command',
+        'class': RunCommand
+    },
+    {
+        'func_name': 'successfully_run_command',
+        'class': SuccessfullyRunCommand
+    },
+    {
+        'func_name': 'run_command_interactively',
+        'class': RunCommandInteractively
+    },
+    {
+        'func_name': 'type_into_command',
+        'class': TypeIntoCommand
+    },
+    {
+        'func_name': 'output_should_contain_text',
+        'class': OutputShouldContainText
+    },
+    {
+        'func_name': 'exit_status_should_be',
+        'class': ExitStatusShouldBe
+    }
+]

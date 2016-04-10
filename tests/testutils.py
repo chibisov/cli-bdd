@@ -22,7 +22,7 @@ class StepsSentenceRegexTestMixin(object):
 
     def test_experiments(self):
         for step_func_name, step_exp in self.step_experiments.items():
-            sentence = self.steps[step_func_name].sentence
+            sentence = self._get_sentence_by_step_func_name(step_func_name)
             for exp in step_exp:
                 result = re.search(sentence, exp['value'])
                 assert_that(
@@ -33,6 +33,12 @@ class StepsSentenceRegexTestMixin(object):
                         'sentence': sentence
                     }
                 )
+
+    def _get_sentence_by_step_func_name(self, step_func_name):
+        for step in self.steps:
+            if step['func_name'] == step_func_name:
+                return step['class'].sentence
+        raise 'Could not find step with func_name "%s"' % step_func_name
 
 
 class StepsTestMixin(object):

@@ -2,7 +2,7 @@
 
 Inspired by [aruba](https://github.com/cucumber/aruba/).
 
-```
+```gherkin
 Feature: showing off cli-bdd
 
     Scenario: create and remove file

@@ -20,12 +20,12 @@ class StepBase(object):
 
 def build_steps(mixin_class, base_steps):
     result = {}
-    for func_name, base_class in base_steps.items():
+    for base_step in base_steps:
         result_class = type(
             'ResultClass',
-            (mixin_class, base_class),
+            (mixin_class, base_step['class']),
             {}
         )
         instance = result_class()
-        result[func_name] = instance.build_step_func()
+        result[base_step['func_name']] = instance.build_step_func()
     return result
