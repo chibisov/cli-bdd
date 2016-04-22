@@ -3,6 +3,7 @@ from copy import deepcopy
 import tempfile
 
 from mock import Mock
+import pexpect
 from hamcrest import (
     assert_that,
     equal_to,
@@ -57,7 +58,11 @@ class CommandStepsMixin(object):
         except Exception as e:
             assert_that(
                 str(e),
-                equal_to('cat: /: Is a directory (exit code 1)')
+                equal_to('cat: /: Is a directory\r\n (exit code 1)')
+            )
+        else:
+            raise AssertionError(
+                'Should fail when response is not successfull'
             )
 
     def test_run_command_interactively(self):
@@ -76,7 +81,8 @@ class CommandStepsMixin(object):
         assert_that(os.path.isfile(file_path), equal_to(True))
 
         # let's communicate and say Yes
-        context.command_response['communicate']('Y')
+        context.command_response['child'].sendline('Y')
+        context.command_response['child'].expect(pexpect.EOF)
 
         # file should be removed
         assert_that(os.path.isfile(file_path), equal_to(False))
@@ -104,16 +110,60 @@ class CommandStepsMixin(object):
                 'input_': 'Y',
             }
         )
+        context.command_response['child'].expect(pexpect.EOF)
 
         # file should be removed
         assert_that(os.path.isfile(file_path), equal_to(False))
 
-    def test_output_should_contain_text(self):
-        context = Mock()
-        context.command_response = {
-            'stdout': 'hello',
-            'stderr': 'world'
-        }
+    def test_got_interactive_dialog(self):
+        file_path = os.path.join(tempfile.gettempdir(), 'test_interactive.txt')
+        with open(file_path, 'wr') as ff:
+            ff.write('Some text')
+
+        for matcher, valid in (
+            ('remove test_interactive.txt', False),
+            ('remove .*/test_interactive.txt', True)
+        ):
+            context = self.execute_module_step(
+                'run_command_interactively',
+                kwargs={
+                    'command': 'rm -i %s' % file_path,
+                }
+            )
+
+            # file should not be removed yet
+            assert_that(os.path.isfile(file_path), equal_to(True))
+
+            # let's wait for a dialog
+            try:
+                new_context = self.execute_module_step(
+                    'got_interactive_dialog',
+                    context=context,
+                    kwargs={
+                        'dialog_matcher': matcher,
+                        'timeout': '0.1'
+                    },
+                )
+            except AssertionError as e:
+                if valid:
+                    raise AssertionError(
+                        'Should not fail with timeout '
+                        'error for valid dialog match "%s"' % matcher
+                    )
+            else:
+                if not valid:
+                    raise AssertionError(
+                        'Should fail with timeout '
+                        'error for invalid dialog match "%s"' % matcher
+                    )
+
+    def test_output_should_contain_text__stdout(self):
+        context = self.execute_module_step(
+            'run_command',
+            kwargs={
+                'command': 'echo "hello"',
+            }
+        )
 
         # stdout contains text
         self.execute_module_step(
@@ -157,35 +207,68 @@ class CommandStepsMixin(object):
         else:
             raise AssertionError("stdout does contain exact text")
 
+    def test_output_should_contain_text__stderr(self):
+        not_existing_file_path = os.path.join(
+            tempfile.gettempdir(),
+            'not_exists.txt'
+        )
+
+        # remove non existing file
+        try:
+            os.remove(not_existing_file_path)
+        except OSError:
+            pass
+
+        error_context = self.execute_module_step(
+            'run_command',
+            kwargs={
+                'command': 'rm %s' % not_existing_file_path,
+            }
+        )
+
         # stderr contains text
         self.execute_module_step(
             'output_should_contain_text',
-            context=context,
+            context=error_context,
             kwargs={
                 'output': 'stderr',
             },
-            text='rld'
+            text='rm: %s: No such file or directory' % not_existing_file_path
         )
 
     def test_exit_status_should_be(self):
-        context = Mock()
-        context.command_response = {
-            'returncode': 1,
-        }
+        not_existing_file_path = os.path.join(
+            tempfile.gettempdir(),
+            'not_exists.txt'
+        )
 
+        # remove non existing file
+        try:
+            os.remove(not_existing_file_path)
+        except OSError:
+            pass
+
+        error_context = self.execute_module_step(
+            'run_command',
+            kwargs={
+                'command': 'rm %s' % not_existing_file_path,
+            }
+        )
+
+        # should be
         self.execute_module_step(
             'exit_status_should_be',
-            context=context,
+            context=error_context,
             kwargs={
                 'exit_status': '1'
             }
         )
 
-        # stdout doesn't contain exact text
+        # shouldn't be
         try:
             self.execute_module_step(
                 'exit_status_should_be',
-                context=context,
+                context=error_context,
                 kwargs={
                     'should_not': 'not',
                     'exit_status': '1'
@@ -239,6 +322,35 @@ class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
                     }
                 }
             }
+        ],
+        'got_interactive_dialog': [
+            {
+                'value': 'I got "Password:" for interactive dialog in 1 second',
+                'expected': {
+                    'kwargs': {
+                        'dialog_matcher': 'Password:',
+                        'timeout': '1'
+                    }
+                }
+            },
+            {
+                'value': 'I got "Name .*: " for interactive dialog in 0.05 seconds',
+                'expected': {
+                    'kwargs': {
+                        'dialog_matcher': 'Name .*: ',
+                        'timeout': '0.05'
+                    }
+                }
+            },
+            {
+                'value': 'I got "Login:" for interactive dialog',
+                'expected': {
+                    'kwargs': {
+                        'dialog_matcher': 'Login:',
+                        'timeout': None
+                    }
+                }
+            },
         ],
         'exit_status_should_be': [
             {

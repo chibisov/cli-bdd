@@ -1,5 +1,8 @@
 import subprocess
 import os
+import sys
+import pexpect
+import StringIO
 
 from hamcrest import (
     assert_that,
@@ -13,29 +16,25 @@ from cli_bdd.core.steps.base import StepBase
 
 
 def run(command, fail_on_error=False, interactively=False):
-    # https://docs.python.org/2/library/subprocess.html#popen-constructor
-    popen = subprocess.Popen(
-        command,
-        shell=True,
-        stdout=subprocess.PIPE,
-        stdin=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
-    if interactively:
-        stdout = popen.stdout
-        stderr = popen.stderr
-        returncode = None
-    else:
-        stdout, stderr = popen.communicate()
-        if fail_on_error and popen.returncode > 0:
-            raise Exception('%s (exit code %s)' % (stderr.strip(), popen.returncode))
-        returncode = popen.returncode
+    child = pexpect.spawn('/bin/sh', ['-c', command], echo=False)
+    child.logfile_read = StringIO.StringIO()
+    child.logfile_send = StringIO.StringIO()
+    if not interactively:
+        child.expect(pexpect.EOF)
+        if fail_on_error and child.exitstatus > 0:
+            raise Exception(
+                '%s (exit code %s)' % (
+                    child.logfile_read.getvalue(),
+                    child.exitstatus
+                )
+            )
     return {
-        'stdout': stdout,
-        'stderr': stderr,
-        'returncode': returncode,
-        'communicate': popen.communicate
+        'child': child,
     }
+
+
+def ensure_command_finished(child):
+    return child.expect(pexpect.EOF)
 
 
 class RunCommand(StepBase):
@@ -106,13 +105,46 @@ class TypeIntoCommand(StepBase):
     sentence = 'I type "(?P<input_>[^"]*)"'
 
     def step(self, input_):
-        response = self.get_scenario_context().command_response['communicate'](
-            input_
-        )
-        self.get_scenario_context().command_response = {
-            'stdout': response[0],
-            'stderr': response[1],
-        }
+        child = self.get_scenario_context().command_response['child']
+        child.logfile_read.truncate(0)  # todo: test me
+        child.sendline(input_)
+
+
+class GotInteractiveDialogCommand(StepBase):
+    """Waits for a dialog.
+
+    By default waits for 1 second. Timeout could be changed by providing
+    `in N seconds` information.
+
+    Examples:
+
+    ```gherkin
+    When I got "Password:" for interactive dialog
+    When I got "Password:" for interactive dialog in 1 second
+    When I got "Name .*: " for interactive dialog in 0.01 seconds
+    ```
+    """
+    type_ = 'when'
+    sentence = (
+        'I got "(?P<dialog_matcher>[^"]*)" for interactive dialog'
+        '( in (?P<timeout>(\d*[.])?\d+) seconds?)?'
+    )
+
+    def step(self, dialog_matcher, timeout):
+        if not timeout:  # todo: test default timeout
+            timeout = 1
+
+        timeout = float(timeout)
+        try:
+            self.get_scenario_context().command_response['child'].expect(
+                dialog_matcher,
+                timeout=timeout
+            )
+        except pexpect.exceptions.TIMEOUT:
+            raise AssertionError(
+                'Have been waiting for interactive dialog '
+                'for more than %s seconds' % timeout
+            )
 
 
 class OutputShouldContainText(StepBase):
@@ -121,7 +153,7 @@ class OutputShouldContainText(StepBase):
     Examples:
 
     ```gherkin
-    Then the the output should contain:
+    Then the output should contain:
         """
         hello
         """
@@ -140,18 +172,25 @@ class OutputShouldContainText(StepBase):
     type_ = 'then'
     sentence = (
         'the (?P<output>(output|stderr|stdout)) '
-        'should( (?P<should_not>not))? contain( (?P<exactly>exactly))?:'
+        'should( (?P<should_not>not))? contain( (?P<exactly>exactly))?'
     )
 
     def step(self, output, should_not=False, exactly=False):
+        child = self.get_scenario_context().command_response['child']
+        ensure_command_finished(child)
         output = 'stdout' if output == 'output' else output
-        data_data = self.get_scenario_context().command_response[output]
+
+        # todo: separate stout and stderr
+        data = child.logfile_read.getvalue().replace('\r\n', '\n')  # todo: test replace
+
+        expected = self.get_text().encode('utf-8')  # todo: test encode
+
         bool_matcher = is_not if should_not else is_
         comparison_matcher = equal_to if exactly else contains_string
         assert_that(
-            data_data,
+            data,
             bool_matcher(
-                comparison_matcher(self.get_text())
+                comparison_matcher(expected)
             )
         )
 
@@ -175,8 +214,12 @@ class ExitStatusShouldBe(StepBase):
     def step(self, should_not=False, exit_status=None):
         exit_status = int(exit_status)
         bool_matcher = is_not if should_not else is_
+        child = self.get_scenario_context().command_response['child']
+
+        ensure_command_finished(child)
+
         assert_that(
-            self.get_scenario_context().command_response['returncode'],
+            child.exitstatus,
             bool_matcher(
                 equal_to(exit_status)
             )
@@ -199,6 +242,10 @@ base_steps = [
     {
         'func_name': 'type_into_command',
         'class': TypeIntoCommand
+    },
+    {
+        'func_name': 'got_interactive_dialog',
+        'class': GotInteractiveDialogCommand
     },
     {
         'func_name': 'output_should_contain_text',

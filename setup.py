@@ -61,6 +61,7 @@ setup(
     author_email='web-chib@ya.ru',
     install_requires=[
         'pyhamcrest>=1.8.5',
+        'pexpect>=4.0.1'
     ],
     packages=get_packages('cli_bdd'),
     package_data=get_package_data('cli_bdd'),

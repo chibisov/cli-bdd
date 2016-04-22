@@ -69,6 +69,27 @@ I type "(?P<input_>[^"]*)"
 ```
 
 
+### got_interactive_dialog
+
+Waits for a dialog.
+
+By default waits for 1 second. Timeout could be changed by providing
+`in N seconds` information.
+
+Examples:
+
+```gherkin
+When I got "Password:" for interactive dialog
+When I got "Password:" for interactive dialog in 1 second
+When I got "Name .*: " for interactive dialog in 0.01 seconds
+```
+
+Matcher:
+```
+I got "(?P<dialog_matcher>[^"]*)" for interactive dialog( in (?P<timeout>(\d*[.])?\d+) seconds?)?
+```
+
+
 ### output_should_contain_text
 
 Checks the command output (stdout, stderr).
@@ -76,7 +97,7 @@ Checks the command output (stdout, stderr).
 Examples:
 
 ```gherkin
-Then the the output should contain:
+Then the output should contain:
     """
     hello
     """
@@ -94,7 +115,7 @@ Then the stderr should not contain exactly:
 
 Matcher:
 ```
-the (?P<output>(output|stderr|stdout)) should( (?P<should_not>not))? contain( (?P<exactly>exactly))?:
+the (?P<output>(output|stderr|stdout)) should( (?P<should_not>not))? contain( (?P<exactly>exactly))?
 ```
 
 
@@ -185,7 +206,7 @@ Given I set the environment variables to:
 
 Matcher:
 ```
-I set the environment variables to:
+I set the environment variables to
 ```
 
 
@@ -203,7 +224,7 @@ I append the values to the environment variables:
 
 Matcher:
 ```
-I append the values to the environment variables:
+I append the values to the environment variables
 ```
 
 
@@ -222,7 +243,7 @@ I prepend the values to the environment variables:
 
 Matcher:
 ```
-I prepend the values to the environment variables:
+I prepend the values to the environment variables
 ```
 
 
@@ -283,6 +304,85 @@ Given the directory named "/tmp/test/"
 Matcher:
 ```
 (a|the) directory( named)? "(?P<dir_path>[^"]*)"
+```
+
+
+### change_directory
+
+Change directory.
+
+Examples:
+
+```gherkin
+Given I cd to "/tmp/test/"
+```
+
+Matcher:
+```
+I cd to "(?P<dir_path>[^"]*)"
+```
+
+
+### create_file_with_content
+
+Creates a file.
+
+Examples:
+
+```gherkin
+Given a file "/tmp/test/" with "some content"
+Given the file named "/tmp/test/" with "another content"
+```
+
+Matcher:
+```
+(a|the) file( named)? "(?P<file_path>[^"]*)" with "(?P<file_content>[^"]*)"
+```
+
+
+### create_file_with_multiline_content
+
+Creates a file with multiline content.
+
+Examples:
+
+```gherkin
+Given a file "/tmp/test/" with:
+    """
+    line one
+    line two
+    line three
+    """
+
+Given a file named "/tmp/test/" with:
+    """
+    line one
+    line two
+    line three
+    """
+```
+
+Matcher:
+```
+(a|the) file( named)? "(?P<file_path>[^"]*)" with
+```
+
+
+### check_file_or_directory_exist
+
+Checks whether file or directory exist.
+
+Examples:
+
+```gherkin
+Then a file "/var/new.txt" should exist
+Then the file named "/var/new.txt" should not exist
+Then the directory "/var/" should not exist
+```
+
+Matcher:
+```
+(a|the) (?P<file_or_directory>(file|directory))( (named|from))? "(?P<path>[^"]*)" should( (?P<should_not>not))? exist
 ```
 
 

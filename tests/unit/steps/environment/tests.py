@@ -245,7 +245,7 @@ class TestEnvironmentStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
         ],
         'set_the_environment_variables': [
             {
-                'value': 'I set the environment variables to:',
+                'value': 'I set the environment variables to',
                 'expected': {
                     'kwargs': {}
                 },
@@ -253,7 +253,7 @@ class TestEnvironmentStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
         ],
         'append_the_values_to_the_environment_variables': [
             {
-                'value': 'I append the values to the environment variables:',
+                'value': 'I append the values to the environment variables',
                 'expected': {
                     'kwargs': {}
                 },
@@ -261,7 +261,7 @@ class TestEnvironmentStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
         ],
         'prepend_the_values_to_the_environment_variables': [
             {
-                'value': 'I prepend the values to the environment variables:',
+                'value': 'I prepend the values to the environment variables',
                 'expected': {
                     'kwargs': {}
                 },

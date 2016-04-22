@@ -25,6 +25,13 @@ class StepsSentenceRegexTestMixin(object):
             sentence = self._get_sentence_by_step_func_name(step_func_name)
             for exp in step_exp:
                 result = re.search(sentence, exp['value'])
+                if result is None and exp['expected']['kwargs']:
+                    raise AssertionError(
+                        'Could not match any data by regex:\n%s\nfor value:\n%s' % (
+                            sentence,
+                            exp['value']
+                        )
+                    )
                 assert_that(
                     result.groupdict(),
                     equal_to(exp['expected']['kwargs']),

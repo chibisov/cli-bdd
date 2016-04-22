@@ -89,7 +89,7 @@ class SetTheEnvironmentVariables(StepBase):
     ```
     """
     type_ = 'given'
-    sentence = 'I set the environment variables to:'
+    sentence = 'I set the environment variables to'
 
     def step(self):
         for variable in self.get_table():
@@ -108,7 +108,7 @@ class AppendTheValuesToTheEnvironmentVariables(StepBase):
     ```
     """
     type_ = 'given'
-    sentence = 'I append the values to the environment variables:'
+    sentence = 'I append the values to the environment variables'
 
     def step(self):
         for variable in self.get_table():
@@ -131,7 +131,7 @@ class PrependTheValuesToTheEnvironmentVariables(StepBase):
     ```
     """
     type_ = 'given'
-    sentence = 'I prepend the values to the environment variables:'
+    sentence = 'I prepend the values to the environment variables'
 
     def step(self):
         for variable in self.get_table():

@@ -194,6 +194,228 @@ class FileStepsMixin(object):
         assert_that(os.path.exists(dir_path), equal_to(True))
         assert_that(os.path.isdir(dir_path), equal_to(True))
 
+    def test_change_directory(self):
+        old_path = os.getcwd()
+        try:
+            dir_path = os.path.realpath('/tmp/')
+            self.execute_module_step(
+                'change_directory',
+                kwargs={
+                    'dir_path': dir_path
+                }
+            )
+
+            assert_that(os.getcwd(), equal_to(dir_path))
+        finally:
+            os.chdir(old_path)
+
+    def test_create_file_with_content(self):
+        file_path = os.path.join(tempfile.gettempdir(), 'file.txt')
+        content = 'hello world'
+
+        try:
+            os.remove(file_path)
+        except OSError:
+            pass
+
+        self.execute_module_step(
+            'create_file_with_content',
+            kwargs={
+                'file_path': file_path,
+                'file_content': content,
+            }
+        )
+        assert_that(os.path.exists(file_path), equal_to(True))
+        assert_that(open(file_path).read(), equal_to(content))
+
+        # test when file already exists
+        self.execute_module_step(
+            'create_file_with_content',
+            kwargs={
+                'file_path': file_path,
+                'file_content': content + '1',
+            }
+        )
+        assert_that(os.path.exists(file_path), equal_to(True))
+        assert_that(open(file_path).read(), equal_to(content + '1'))
+
+    def test_create_file_with_multiline_content(self):
+        file_path = os.path.join(tempfile.gettempdir(), 'file.txt')
+        content = 'hello world'
+
+        try:
+            os.remove(file_path)
+        except OSError:
+            pass
+
+        self.execute_module_step(
+            'create_file_with_multiline_content',
+            text=content,
+            kwargs={
+                'file_path': file_path,
+            }
+        )
+        assert_that(os.path.exists(file_path), equal_to(True))
+        assert_that(open(file_path).read(), equal_to(content))
+
+        # test when file already exists
+        self.execute_module_step(
+            'create_file_with_multiline_content',
+            text=content + '1',
+            kwargs={
+                'file_path': file_path
+            }
+        )
+        assert_that(os.path.exists(file_path), equal_to(True))
+        assert_that(open(file_path).read(), equal_to(content + '1'))
+
+    def test_check_file_or_directory_exist__file(self):
+        file_path = os.path.join(tempfile.gettempdir(), 'file.txt')
+
+        with open(file_path, 'wt') as ff:
+            ff.write('hello')
+
+        try:
+            self.execute_module_step(
+                'check_file_or_directory_exist',
+                kwargs={
+                    'file_or_directory': 'file',
+                    'path': file_path
+                }
+            )
+        except AssertionError as e:
+            raise AssertionError(
+                'Assertion should not fail because file exists'
+            )
+
+        # check "not" assertion
+        try:
+            self.execute_module_step(
+                'check_file_or_directory_exist',
+                kwargs={
+                    'file_or_directory': 'file',
+                    'path': file_path,
+                    'should_not': True
+                }
+            )
+        except AssertionError as e:
+            pass
+        else:
+            raise AssertionError(
+                'Assertion should fail because file exists'
+            )
+
+        # check without file
+
+        try:
+            os.remove(file_path)
+        except OSError:
+            pass
+
+        try:
+            self.execute_module_step(
+                'check_file_or_directory_exist',
+                kwargs={
+                    'file_or_directory': 'file',
+                    'path': file_path
+                }
+            )
+        except AssertionError as e:
+            pass
+        else:
+            raise AssertionError(
+                'Assertion should fail because file does not exist'
+            )
+
+
+        # check "not" assertion
+        try:
+            self.execute_module_step(
+                'check_file_or_directory_exist',
+                kwargs={
+                    'file_or_directory': 'file',
+                    'path': file_path,
+                    'should_not': True
+                }
+            )
+        except AssertionError as e:
+            raise AssertionError(
+                'Assertion should not fail because file does not exist'
+            )
+
+    def test_check_file_or_directory_exist__directory(self):
+        dir_path = os.path.join(tempfile.gettempdir(), 'some_dir/')
+
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+
+        try:
+            self.execute_module_step(
+                'check_file_or_directory_exist',
+                kwargs={
+                    'file_or_directory': 'directory',
+                    'path': dir_path
+                }
+            )
+        except AssertionError as e:
+            raise AssertionError(
+                'Assertion should not fail because directory exists'
+            )
+
+        # check "not" assertion
+        try:
+            self.execute_module_step(
+                'check_file_or_directory_exist',
+                kwargs={
+                    'file_or_directory': 'directory',
+                    'path': dir_path,
+                    'should_not': True
+                }
+            )
+        except AssertionError as e:
+            pass
+        else:
+            raise AssertionError(
+                'Assertion should fail because directory exists'
+            )
+
+        # check without directory
+        try:
+            shutil.rmtree(dir_path)
+        except OSError:
+            pass
+
+        try:
+            self.execute_module_step(
+                'check_file_or_directory_exist',
+                kwargs={
+                    'file_or_directory': 'directory',
+                    'path': dir_path
+                }
+            )
+        except AssertionError as e:
+            pass
+        else:
+            raise AssertionError(
+                'Assertion should fail because directory does not exist'
+            )
+
+
+        # check "not" assertion
+        try:
+            self.execute_module_step(
+                'check_file_or_directory_exist',
+                kwargs={
+                    'file_or_directory': 'directory',
+                    'path': dir_path,
+                    'should_not': True
+                }
+            )
+        except AssertionError as e:
+            raise AssertionError(
+                'Assertion should not fail because directory does not exist'
+            )
+
 
 class TestFileStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
     steps = base_steps
@@ -260,6 +482,78 @@ class TestFileStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
                 }
             },
         ],
+        'change_directory': [
+            {
+                'value': 'I cd to "/tmp/test/"',
+                'expected': {
+                    'kwargs': {
+                        'dir_path': '/tmp/test/',
+                    }
+                }
+            }
+        ],
+        'create_file_with_content': [
+            {
+                'value': 'Given a file "/tmp/test/" with "some content"',
+                'expected': {
+                    'kwargs': {
+                        'file_path': '/tmp/test/',
+                        'file_content': 'some content',
+                    }
+                }
+            },
+            {
+                'value': 'Given the file named "/tmp/test/" with "another content"',
+                'expected': {
+                    'kwargs': {
+                        'file_path': '/tmp/test/',
+                        'file_content': 'another content',
+                    }
+                }
+            },
+        ],
+        'create_file_with_multiline_content': [
+            {
+                'value': 'Given a file "/tmp/test/" with',
+                'expected': {
+                    'kwargs': {
+                        'file_path': '/tmp/test/'
+                    }
+                }
+            },
+        ],
+        'check_file_or_directory_exist': [
+            {
+                'value': 'a file "/var/new.txt" should exist',
+                'expected': {
+                    'kwargs': {
+                        'file_or_directory': 'file',
+                        'path': '/var/new.txt',
+                        'should_not': None
+                    }
+                }
+            },
+            {
+                'value': 'the file named "/var/new.txt" should not exist',
+                'expected': {
+                    'kwargs': {
+                        'file_or_directory': 'file',
+                        'path': '/var/new.txt',
+                        'should_not': 'not'
+                    }
+                }
+            },
+            {
+                'value': 'the directory "/var/" should not exist',
+                'expected': {
+                    'kwargs': {
+                        'file_or_directory': 'directory',
+                        'path': '/var/',
+                        'should_not': 'not'
+                    }
+                }
+            },
+        ]
     }
 
 

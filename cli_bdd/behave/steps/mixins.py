@@ -1,4 +1,5 @@
-from behave import given, when, then
+
+from behave import given, when, then, use_step_matcher
 
 
 DECORATORS_BY_TYPES = {
@@ -11,10 +12,13 @@ DECORATORS_BY_TYPES = {
 class BehaveStepMixin(object):
     def build_step_func(self):
         decorator = DECORATORS_BY_TYPES[self.type_]
+        use_step_matcher('re')
+
         @decorator(self.sentence)
         def behave_step(context, *args, **kwargs):
             self.context = context
-            return self.step(*args, **kwargs)
+            # args not used. Your regex must use named groups "(?P<name>...)"
+            return self.step(**kwargs)
 
         return behave_step
 
