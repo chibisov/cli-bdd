@@ -1,5 +1,3 @@
-{% for step_type in steps_by_types %}
-# {{ step_type.name | capitalize }}
 
 Module: `{{ step_type.module }}`
 
@@ -12,7 +10,5 @@ Matcher:
 ```
 {{ step.class.sentence }}
 ```
-
-{% endfor %}
 
 {% endfor %}

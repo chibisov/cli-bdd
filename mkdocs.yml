@@ -9,5 +9,8 @@ pages:
 - Home: index.md
 - Behave: behave.md
 - Lettuce: lettuce.md
-- Steps: steps.md
+- Steps: 
+    - steps/environment.md
+    - steps/file.md
+    - steps/command.md
 - Development: development.md

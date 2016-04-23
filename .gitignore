@@ -5,3 +5,4 @@
 __pycache__
 site/
 dist/
+docs/steps/*

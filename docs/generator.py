@@ -46,9 +46,9 @@ def _prepare_docstring(value):
     ).strip()
 
 
-def _render_and_save_template(path, context):
+def _render_and_save_template(path, dest, context):
     template_path = os.path.join(TEMPLATES_PATH, path + '.tpl')
-    destination_path = os.path.join(BASE_PATH, path + '.md')
+    destination_path = os.path.join(BASE_PATH, dest + '.md')
     with open(destination_path, 'wt') as dest_file:
         dest_file.write(
             Template(open(template_path).read()).render(context)
@@ -70,10 +70,12 @@ def generate_steps_reference():
             'base_steps': step_module.base_steps
         })
 
-    _render_and_save_template(
-        'steps',
-        {
-            'steps_by_types': steps_by_types,
-            'prepare_docstring': _prepare_docstring
-        }
-    )
+    for step_type in steps_by_types:
+        _render_and_save_template(
+            'steps',
+            'steps/' + step_type['name'],
+            {
+                'step_type': step_type,
+                'prepare_docstring': _prepare_docstring
+            }
+        )

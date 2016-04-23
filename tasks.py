@@ -39,7 +39,7 @@ def serve_docs():
 
     target_cmd = (
         'watchmedo shell-command -R -c '
-        '"invoke generate-api-reference" cli_bdd docs'
+        '"invoke generate-api-reference" cli_bdd docs/templates'
     )
     p = threading.Thread(target=run, args=(target_cmd,))
     p.daemon = True
