@@ -1,4 +1,9 @@
-`cli-bdd` could be used with [behave](https://pythonhosted.org/behave/index.html).
+!!! Warning
+    Lettuce has a [bug](https://github.com/gabrielfalcao/lettuce/issues/464) which
+    doesn't allow you to use it with `cli-bdd` yet. When the bug is fixed we will
+    turn on functional test in `tests/functional/lettuce/tests.py`.
+
+`cli-bdd` could be used with [lettuce](http://lettuce.it/) (not yet).
 
 # Steps
 

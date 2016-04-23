@@ -9,7 +9,7 @@ BASE_PATH = os.path.dirname(os.path.normpath(__file__))
 FEATURES_PATH = os.path.join(BASE_PATH, 'features/')
 
 
-class TestLettuceFunctional(TestCase):
+class _TestLettuceFunctional(TestCase):
     def test_me(self):
         stdout = subprocess.Popen(
             'lettuce %s -v 1' % FEATURES_PATH,
