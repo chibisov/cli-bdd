@@ -227,7 +227,7 @@ class CommandStepsMixin(object):
             kwargs={
                 'output': 'stderr',
             },
-            text='rm: %s: No such file or directory' % not_existing_file_path
+            text='No such file or directory'
         )
 
     def test_exit_status_should_be(self):
