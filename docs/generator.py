@@ -15,7 +15,6 @@ from cli_bdd.core.steps import (
 
 BASE_PATH = os.path.dirname(os.path.normpath(__file__))
 TEMPLATES_PATH = os.path.join(BASE_PATH, 'templates')
-DEST_PATH = os.path.join(BASE_PATH)
 
 
 STEPS_MODULES = [
@@ -69,6 +68,10 @@ def generate_steps_reference():
             'module': step_module.__name__,
             'base_steps': step_module.base_steps
         })
+
+    steps_dir = os.path.join(BASE_PATH, 'steps/')
+    if not os.path.exists(steps_dir):
+        os.makedirs(steps_dir)
 
     for step_type in steps_by_types:
         _render_and_save_template(
