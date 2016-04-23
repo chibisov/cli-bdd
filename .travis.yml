@@ -21,4 +21,5 @@ script:
     - tox -e py27-docs
 
 after_success:
-    - tox -e deploy-docs
+    - pip install -r requirements/docs.txt
+    - invoke deploy-docs
