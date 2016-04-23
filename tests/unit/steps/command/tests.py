@@ -180,8 +180,25 @@ class CommandStepsMixin(object):
                 },
                 text='ell'
             )
-        except AssertionError:
-            pass
+        except AssertionError as e:
+            assert_that(
+                str(e),
+                equal_to(
+                    'Comparison error. Diff:\n'
+                    '*** \n'
+                    '\n'
+                    '--- \n'
+                    '\n'
+                    '***************\n'
+                    '\n'
+                    '*** 1 ****\n'
+                    '\n'
+                    '! hello\n'
+                    '--- 1 ----\n'
+                    '\n'
+                    '! ell'
+                )
+            )
         else:
             raise AssertionError("stdout doesn't contain exact text")
 

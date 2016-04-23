@@ -1,4 +1,5 @@
 import StringIO
+import difflib
 
 import pexpect
 from hamcrest import assert_that, contains_string, equal_to, is_, is_not
@@ -179,12 +180,26 @@ class OutputShouldContainText(StepBase):
 
         bool_matcher = is_not if should_not else is_
         comparison_matcher = equal_to if exactly else contains_string
-        assert_that(
-            data,
-            bool_matcher(
-                comparison_matcher(expected)
+        try:
+            assert_that(
+                data,
+                bool_matcher(
+                    comparison_matcher(expected)
+                )
             )
-        )
+        except AssertionError:
+            if comparison_matcher == equal_to and bool_matcher == is_:
+                diff = '\n'.join(
+                    difflib.context_diff(
+                        data.splitlines(),
+                        expected.splitlines()
+                    )
+                )
+                raise AssertionError(
+                    'Comparison error. Diff:\n' + diff
+                )
+            else:
+                raise
 
 
 class ExitStatusShouldBe(StepBase):
