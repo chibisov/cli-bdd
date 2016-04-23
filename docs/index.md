@@ -13,7 +13,6 @@ Feature: showing off cli-bdd
         Then the file "/tmp/test.txt" should not exist
 ```
 
-
 [Source repository on Github](https://github.com/chibisov/cli-bdd).
 
 Installation:
