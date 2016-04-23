@@ -12,7 +12,7 @@ env:
     global:
     - GH_REF: github.com/chibisov/cli-bdd.git
     - EMAIL: web-chib@ya.ru
-    - secure: "EfvFR+qNmqo5T5bLk0R40PRMMaLTMNb0QOO896uHP7FfIq/3Z8Jn2gTPBH3tOBFSEytb2oL6mANuZTBhrK/0DzWsW34uHm26dgK6AUkw/PNqJItFt9Y6Da4tGeOtmqMzCCYr16Szx/zIHCB4Cr0tSfXi/B6FVA+4Ejkph4Fs87F5HwsDYmgIxpR6V7TaWTE3C+d9IKZ7EwcQyHW1Jawo2bIx1M4xHhokBvZuGrxEHrz2zehobuxuP9xBbyjHE/XxNUinCIsfSzo8prfFIuGQN2a2B4+vMvW4lq203pcBILkXFeYArU6JksHfafW0PM3cp4ES3Xq+9Tcd8ObW2a0D3wYs+amVYrqZ5dBqwslQYpLKZrNByKIGzUaUS9QRSKYeSaeWqGKZUTuVxJpq+8nmiC6ImyqMqptbZ4+MtnwdRNVsxipOPOxcG1PvSW4mZXhJSE6SSkCcaaJyeeDkYBSsm5Dg3UlEiQmWlH8L9SOD752DE30A0iDNlcZZ2n5iM37RLQM518dLjlmEYh08FlLWsBRIdhGdyVAzKV0DQNH5d6Ssy2AyZwkVfCfoylYX4IpgFcFTtA0ACxQwN/aCGjdTe8prKQTK8fFTo+htpfZAgG/lrIiQ+ZKeDmjHppprQBVqYE8xwgn1lY9Lbn+hMwG/NqSPavLOebNZEPCqiDg0RFo="
+    - secure: "DXBBLDIwuvR4yNvbsFB44SX86SSNJ0DmDhRIW48vr09O6UmTqbDWUuK1zMGAFAJg7nT3JEgFfyVVrMXqbuCSAwvILC1CzmucLAZpIl21CXk1MO0qKTwkpMBxVlKSp5Jb3XgMYanTm5qaq34yUAvFBeMJm/W3U5pNAFmUbeVKAkDhc2LocB/9juI20QSuG+f5nEl6Z9kxPvXHQG3MqnmC+IvD7CfTGzXQXrbhONx75tAUG58eflwVZbVbQdsOPScSSOUw9scL6yNedG1QPQ8MZ+Mx+RXspEL75eLkvbQtKlWgp+EWmSyYDqCHQE9LYC6D03qYJHIFWcU2JMDKNqm82bQI1MY/U6oRtlcUdXDOfFQTyVgINj3yhQwsGqCBJVzIZ9LwC+oekuJvMaip1nR7A2nn2WfQ6EPp1yqi3WdYqj7xTWHWhOuFooGFbn7/+iZKc6rBCNtcpcN/K2HQKpwBojr8+S12dzjEyXXCXzi95IDuxnEFNWAJYTZlSCJzzakPJy+5AgeAs5yEED1KklozGCNEfbOWjSX5dFvCK1EzlY8/jG+3xFjCSmIaixotVzYL6FCgANvCzxua8XV3Kkye3sgLwI1RkJjulyFoJvEr+ndVbiFGvV1B5f5G9zh84dFkFVw7lVbNmgWDrClsSP7lzgKRGBuyiQzLx0RAAohV30U="
 
 script:
     - tox -e flake8
@@ -21,5 +21,4 @@ script:
     - tox -e py27-docs
 
 after_success:
-    - pip install -r requirements/docs.txt
-    - invoke deploy-docs
+    - tox -e deploy-docs
