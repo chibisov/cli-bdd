@@ -2,6 +2,8 @@
 
 Inspired by [aruba](https://github.com/cucumber/aruba/).
 
+[Documentation](http://chibisov.github.io/cli-bdd/).
+
 ```gherkin
 Feature: showing off cli-bdd
 

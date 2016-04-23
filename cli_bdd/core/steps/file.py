@@ -1,13 +1,7 @@
 import os
 import shutil
 
-from hamcrest import (
-    assert_that,
-    contains_string,
-    equal_to,
-    is_not,
-    is_,
-)
+from hamcrest import assert_that, equal_to
 
 from cli_bdd.core.steps.base import StepBase
 
@@ -161,7 +155,8 @@ class CheckFileOrDirectoryExist(StepBase):
     type_ = 'then'
     sentence = (
         '(a|the) (?P<file_or_directory>(file|directory))'
-        '( (named|from))? "(?P<path>[^"]*)" should( (?P<should_not>not))? exist'
+        '( (named|from))? "(?P<path>[^"]*)" '
+        'should( (?P<should_not>not))? exist'
     )
 
     def step(self, file_or_directory, path, should_not=None):

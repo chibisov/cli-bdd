@@ -1,22 +1,17 @@
 import os
 from copy import deepcopy
 
-from mock import Mock
-from hamcrest import (
-    assert_that,
-    equal_to,
-    has_entries
-)
+from hamcrest import assert_that, equal_to, has_entries
 
+from cli_bdd.behave.steps import environment as behave_environment
+from cli_bdd.core.steps.environment import base_steps
+from cli_bdd.lettuce.steps import environment as lettuce_environment
 from testutils import (
-    TestCase,
     BehaveStepsTestMixin,
     LettuceStepsTestMixin,
     StepsSentenceRegexTestMixin,
+    TestCase
 )
-from cli_bdd.core.steps.environment import base_steps
-from cli_bdd.behave.steps import environment as behave_environment
-from cli_bdd.lettuce.steps import environment as lettuce_environment
 
 
 class EnvironmentStepsMixin(object):
@@ -223,7 +218,9 @@ class TestEnvironmentStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
         ],
         'append_to_the_environment_variable': [
             {
-                'value': 'I append "sosisa" to the environment variable "polina"',
+                'value': (
+                    'I append "sosisa" to the environment variable "polina"'
+                ),
                 'expected': {
                     'kwargs': {
                         'variable': 'polina',
@@ -234,7 +231,9 @@ class TestEnvironmentStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
         ],
         'prepend_to_the_environment_variable': [
             {
-                'value': 'I prepend "sosisa" to the environment variable "polina"',
+                'value': (
+                    'I prepend "sosisa" to the environment variable "polina"'
+                ),
                 'expected': {
                     'kwargs': {
                         'variable': 'polina',

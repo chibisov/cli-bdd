@@ -1,16 +1,7 @@
-import subprocess
-import os
-import sys
-import pexpect
 import StringIO
 
-from hamcrest import (
-    assert_that,
-    contains_string,
-    equal_to,
-    is_not,
-    is_,
-)
+import pexpect
+from hamcrest import assert_that, contains_string, equal_to, is_, is_not
 
 from cli_bdd.core.steps.base import StepBase
 
@@ -180,8 +171,9 @@ class OutputShouldContainText(StepBase):
         ensure_command_finished(child)
         output = 'stdout' if output == 'output' else output
 
-        # todo: separate stout and stderr
-        data = child.logfile_read.getvalue().replace('\r\n', '\n')  # todo: test replace
+        # todo: separate stdout and stderr
+        # todo: test replace
+        data = child.logfile_read.getvalue().replace('\r\n', '\n')
 
         expected = self.get_text().encode('utf-8')  # todo: test encode
 

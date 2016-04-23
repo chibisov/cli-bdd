@@ -1,24 +1,18 @@
 import os
-from copy import deepcopy
 import tempfile
 
-from mock import Mock
 import pexpect
-from hamcrest import (
-    assert_that,
-    equal_to,
-    has_entries,
-)
+from hamcrest import assert_that, equal_to
 
+from cli_bdd.behave.steps import command as behave_command
+from cli_bdd.core.steps.command import base_steps
+from cli_bdd.lettuce.steps import command as lettuce_command
 from testutils import (
-    TestCase,
     BehaveStepsTestMixin,
     LettuceStepsTestMixin,
     StepsSentenceRegexTestMixin,
+    TestCase
 )
-from cli_bdd.core.steps.command import base_steps
-from cli_bdd.behave.steps import command as behave_command
-from cli_bdd.lettuce.steps import command as lettuce_command
 
 
 class CommandStepsMixin(object):
@@ -103,7 +97,7 @@ class CommandStepsMixin(object):
         assert_that(os.path.isfile(file_path), equal_to(True))
 
         # let's communicate and say Yes via step
-        new_context = self.execute_module_step(
+        self.execute_module_step(
             'type_into_command',
             context=context,
             kwargs={
@@ -136,7 +130,7 @@ class CommandStepsMixin(object):
 
             # let's wait for a dialog
             try:
-                new_context = self.execute_module_step(
+                self.execute_module_step(
                     'got_interactive_dialog',
                     context=context,
                     kwargs={
@@ -144,7 +138,7 @@ class CommandStepsMixin(object):
                         'timeout': '0.1'
                     },
                 )
-            except AssertionError as e:
+            except AssertionError:
                 if valid:
                     raise AssertionError(
                         'Should not fail with timeout '
@@ -186,7 +180,7 @@ class CommandStepsMixin(object):
                 },
                 text='ell'
             )
-        except AssertionError as e:
+        except AssertionError:
             pass
         else:
             raise AssertionError("stdout doesn't contain exact text")
@@ -202,7 +196,7 @@ class CommandStepsMixin(object):
                 },
                 text='ell'
             )
-        except AssertionError as e:
+        except AssertionError:
             pass
         else:
             raise AssertionError("stdout does contain exact text")
@@ -274,7 +268,7 @@ class CommandStepsMixin(object):
                     'exit_status': '1'
                 }
             )
-        except AssertionError as e:
+        except AssertionError:
             pass
         else:
             raise AssertionError("exit status equals 1")
@@ -325,7 +319,9 @@ class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
         ],
         'got_interactive_dialog': [
             {
-                'value': 'I got "Password:" for interactive dialog in 1 second',
+                'value': (
+                    'I got "Password:" for interactive dialog in 1 second'
+                ),
                 'expected': {
                     'kwargs': {
                         'dialog_matcher': 'Password:',
@@ -334,7 +330,9 @@ class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
                 }
             },
             {
-                'value': 'I got "Name .*: " for interactive dialog in 0.05 seconds',
+                'value': (
+                    'I got "Name .*: " for interactive dialog in 0.05 seconds'
+                ),
                 'expected': {
                     'kwargs': {
                         'dialog_matcher': 'Name .*: ',

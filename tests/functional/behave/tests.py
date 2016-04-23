@@ -1,13 +1,9 @@
-import subprocess
 import os
+import subprocess
 
-from hamcrest import (
-    assert_that,
-    equal_to,
-)
+from hamcrest import assert_that, equal_to
 
 from testutils import TestCase
-
 
 BASE_PATH = os.path.dirname(os.path.normpath(__file__))
 FEATURES_PATH = os.path.join(BASE_PATH, 'features/')

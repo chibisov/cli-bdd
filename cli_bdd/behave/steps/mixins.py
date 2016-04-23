@@ -1,6 +1,5 @@
 
-from behave import given, when, then, use_step_matcher
-
+from behave import given, then, use_step_matcher, when
 
 DECORATORS_BY_TYPES = {
     'given': given,

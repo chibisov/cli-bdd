@@ -1,0 +1,22 @@
+language: python
+python:
+  - "2.7"
+
+matrix:
+  fast_finish: true
+
+install:
+  - pip install tox "virtualenv<14"
+
+env:
+    - TOX_ENV=py27
+    global:
+    - GH_REF: github.com/chibisov/cli-bdd.git
+    - EMAIL: web-chib@ya.ru
+    - secure: "EfvFR+qNmqo5T5bLk0R40PRMMaLTMNb0QOO896uHP7FfIq/3Z8Jn2gTPBH3tOBFSEytb2oL6mANuZTBhrK/0DzWsW34uHm26dgK6AUkw/PNqJItFt9Y6Da4tGeOtmqMzCCYr16Szx/zIHCB4Cr0tSfXi/B6FVA+4Ejkph4Fs87F5HwsDYmgIxpR6V7TaWTE3C+d9IKZ7EwcQyHW1Jawo2bIx1M4xHhokBvZuGrxEHrz2zehobuxuP9xBbyjHE/XxNUinCIsfSzo8prfFIuGQN2a2B4+vMvW4lq203pcBILkXFeYArU6JksHfafW0PM3cp4ES3Xq+9Tcd8ObW2a0D3wYs+amVYrqZ5dBqwslQYpLKZrNByKIGzUaUS9QRSKYeSaeWqGKZUTuVxJpq+8nmiC6ImyqMqptbZ4+MtnwdRNVsxipOPOxcG1PvSW4mZXhJSE6SSkCcaaJyeeDkYBSsm5Dg3UlEiQmWlH8L9SOD752DE30A0iDNlcZZ2n5iM37RLQM518dLjlmEYh08FlLWsBRIdhGdyVAzKV0DQNH5d6Ssy2AyZwkVfCfoylYX4IpgFcFTtA0ACxQwN/aCGjdTe8prKQTK8fFTo+htpfZAgG/lrIiQ+ZKeDmjHppprQBVqYE8xwgn1lY9Lbn+hMwG/NqSPavLOebNZEPCqiDg0RFo="
+
+script:
+    - tox -e $TOX_ENV
+
+after_success:
+    - invoke deploy-docs

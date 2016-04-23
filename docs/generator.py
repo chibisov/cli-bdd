@@ -2,7 +2,7 @@
 import sys
 import os
 import re
-sys.path.append('../')
+sys.path.append('../')  # noqa
 
 from jinja2 import Template
 
@@ -23,7 +23,6 @@ STEPS_MODULES = [
     environment,
     file_steps,
 ]
-
 
 
 def _prepare_docstring(value):

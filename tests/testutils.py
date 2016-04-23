@@ -1,15 +1,12 @@
-import unittest
 import re
+import unittest
 
-from mock import Mock, patch
-from hamcrest import (
-    assert_that,
-    equal_to,
-)
+from hamcrest import assert_that, equal_to
 
 from cli_bdd.behave import steps as behave_steps_root_module
 from cli_bdd.lettuce import steps as lettuce_steps_root_module
 from cli_bdd.lettuce.steps.mixins import LettuceStepMixin
+from mock import Mock, patch
 
 
 class TestCase(unittest.TestCase):
@@ -27,7 +24,8 @@ class StepsSentenceRegexTestMixin(object):
                 result = re.search(sentence, exp['value'])
                 if result is None and exp['expected']['kwargs']:
                     raise AssertionError(
-                        'Could not match any data by regex:\n%s\nfor value:\n%s' % (
+                        'Could not match any data '
+                        'by regex:\n%s\nfor value:\n%s' % (
                             sentence,
                             exp['value']
                         )
@@ -52,7 +50,12 @@ class StepsTestMixin(object):
     module = None
     root_module = None
 
-    def execute_module_step(self, name, context=None, kwargs={}, table=[], text=None):
+    def execute_module_step(self,
+                            name,
+                            context=None,
+                            kwargs={},
+                            table=[],
+                            text=None):
         assert_that(
             getattr(self.module, name),
             equal_to(getattr(self.root_module, name))
@@ -90,6 +93,10 @@ class LettuceStepsTestMixin(StepsTestMixin):
         step_context.hashes = table
         step_context.multiline = text
 
-        with patch.object(LettuceStepMixin, 'get_scenario_context', lambda self: context):
+        with patch.object(
+            LettuceStepMixin,
+            'get_scenario_context',
+            lambda self: context
+        ):
             getattr(self.module, name)(step_context, **kwargs)
         return context

@@ -1,26 +1,18 @@
 import os
-import tempfile
 import shutil
+import tempfile
 
-from mock import Mock
-from hamcrest import (
-    assert_that,
-    equal_to,
-    has_entries,
-    calling,
-    raises,
-    is_not,
-)
+from hamcrest import assert_that, calling, equal_to, is_not, raises
 
+from cli_bdd.behave.steps import file as behave_file
+from cli_bdd.core.steps.file import base_steps
+from cli_bdd.lettuce.steps import file as lettuce_file
 from testutils import (
-    TestCase,
     BehaveStepsTestMixin,
     LettuceStepsTestMixin,
     StepsSentenceRegexTestMixin,
+    TestCase
 )
-from cli_bdd.core.steps.file import base_steps
-from cli_bdd.behave.steps import file as behave_file
-from cli_bdd.lettuce.steps import file as lettuce_file
 
 
 class FileStepsMixin(object):
@@ -50,7 +42,10 @@ class FileStepsMixin(object):
         assert_that(open(new_file_path).read(), equal_to(original_file_text))
 
     def test_copy_file_or_directory__directory(self):
-        original_dir_path = os.path.join(tempfile.gettempdir(), 'original_dir/')
+        original_dir_path = os.path.join(
+            tempfile.gettempdir(),
+            'original_dir/'
+        )
         original_subdir_path = os.path.join(original_dir_path, 'subdir/')
         original_subdir_path_file = os.path.join(
             original_subdir_path, 'file.txt'
@@ -119,7 +114,10 @@ class FileStepsMixin(object):
         assert_that(open(new_file_path).read(), equal_to(original_file_text))
 
     def test_move_file_or_directory__directory(self):
-        original_dir_path = os.path.join(tempfile.gettempdir(), 'original_dir/')
+        original_dir_path = os.path.join(
+            tempfile.gettempdir(),
+            'original_dir/'
+        )
         original_subdir_path = os.path.join(original_dir_path, 'subdir/')
         original_subdir_path_file = os.path.join(
             original_subdir_path, 'file.txt'
@@ -283,7 +281,7 @@ class FileStepsMixin(object):
                     'path': file_path
                 }
             )
-        except AssertionError as e:
+        except AssertionError:
             raise AssertionError(
                 'Assertion should not fail because file exists'
             )
@@ -298,7 +296,7 @@ class FileStepsMixin(object):
                     'should_not': True
                 }
             )
-        except AssertionError as e:
+        except AssertionError:
             pass
         else:
             raise AssertionError(
@@ -320,13 +318,12 @@ class FileStepsMixin(object):
                     'path': file_path
                 }
             )
-        except AssertionError as e:
+        except AssertionError:
             pass
         else:
             raise AssertionError(
                 'Assertion should fail because file does not exist'
             )
-
 
         # check "not" assertion
         try:
@@ -338,7 +335,7 @@ class FileStepsMixin(object):
                     'should_not': True
                 }
             )
-        except AssertionError as e:
+        except AssertionError:
             raise AssertionError(
                 'Assertion should not fail because file does not exist'
             )
@@ -357,7 +354,7 @@ class FileStepsMixin(object):
                     'path': dir_path
                 }
             )
-        except AssertionError as e:
+        except AssertionError:
             raise AssertionError(
                 'Assertion should not fail because directory exists'
             )
@@ -372,7 +369,7 @@ class FileStepsMixin(object):
                     'should_not': True
                 }
             )
-        except AssertionError as e:
+        except AssertionError:
             pass
         else:
             raise AssertionError(
@@ -393,13 +390,12 @@ class FileStepsMixin(object):
                     'path': dir_path
                 }
             )
-        except AssertionError as e:
+        except AssertionError:
             pass
         else:
             raise AssertionError(
                 'Assertion should fail because directory does not exist'
             )
-
 
         # check "not" assertion
         try:
@@ -411,7 +407,7 @@ class FileStepsMixin(object):
                     'should_not': True
                 }
             )
-        except AssertionError as e:
+        except AssertionError:
             raise AssertionError(
                 'Assertion should not fail because directory does not exist'
             )
@@ -503,7 +499,9 @@ class TestFileStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
                 }
             },
             {
-                'value': 'Given the file named "/tmp/test/" with "another content"',
+                'value': (
+                    'Given the file named "/tmp/test/" with "another content"'
+                ),
                 'expected': {
                     'kwargs': {
                         'file_path': '/tmp/test/',
