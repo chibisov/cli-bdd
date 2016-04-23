@@ -5,8 +5,8 @@ Inspired by [aruba](https://github.com/cucumber/aruba/).
 [Documentation](http://chibisov.github.io/cli-bdd/).
 
 [![Build Status](https://travis-ci.org/chibisov/cli-bdd.svg?branch=master)](https://travis-ci.org/chibisov/cli-bdd)
-[![PyPI](https://img.shields.io/pypi/v/cli-bdd.svg?maxAge=2592000)]()
-[![PyPI](https://img.shields.io/pypi/dm/cli-bdd.svg?maxAge=2592000)]()
+[![PyPI](https://img.shields.io/pypi/v/cli-bdd.svg?maxAge=2592000)](https://pypi.python.org/pypi/cli-bdd)
+[![PyPI](https://img.shields.io/pypi/dm/cli-bdd.svg?maxAge=2592000)](https://pypi.python.org/pypi/cli-bdd)
 
 ```gherkin
 Feature: showing off cli-bdd
