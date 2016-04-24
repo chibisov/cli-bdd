@@ -1,5 +1,5 @@
-import StringIO
 import difflib
+import StringIO
 
 import pexpect
 from hamcrest import assert_that, contains_string, equal_to, is_, is_not
@@ -175,8 +175,14 @@ class OutputShouldContainText(StepBase):
         # todo: separate stdout and stderr
         # todo: test replace
         data = child.logfile_read.getvalue().replace('\r\n', '\n')
+        data_lines = data.splitlines()
+        if data.endswith('\n'):
+            data_lines.append('')
 
         expected = self.get_text().encode('utf-8')  # todo: test encode
+        expected_lines = expected.splitlines()
+        if expected.endswith('\n'):
+            expected_lines.append('')
 
         bool_matcher = is_not if should_not else is_
         comparison_matcher = equal_to if exactly else contains_string
@@ -191,13 +197,11 @@ class OutputShouldContainText(StepBase):
             if comparison_matcher == equal_to and bool_matcher == is_:
                 diff = '\n'.join(
                     difflib.context_diff(
-                        data.splitlines(),
-                        expected.splitlines()
+                        data_lines,
+                        expected_lines
                     )
                 )
-                raise AssertionError(
-                    'Comparison error. Diff:\n' + diff
-                )
+                raise AssertionError('Comparison error. Diff:\n' + diff)
             else:
                 raise
 

@@ -191,9 +191,10 @@ class CommandStepsMixin(object):
                     '\n'
                     '***************\n'
                     '\n'
-                    '*** 1 ****\n'
+                    '*** 1,2 ****\n'
                     '\n'
                     '! hello\n'
+                    '! \n'
                     '--- 1 ----\n'
                     '\n'
                     '! ell'
@@ -217,6 +218,86 @@ class CommandStepsMixin(object):
             pass
         else:
             raise AssertionError("stdout does contain exact text")
+
+    def test_output_should_contain_text__new_line_highlight(self):
+        # expected does not contain new line
+        context = self.execute_module_step(
+            'run_command',
+            kwargs={
+                'command': 'echo "hello"',
+            }
+        )
+
+        try:
+            self.execute_module_step(
+                'output_should_contain_text',
+                context=context,
+                kwargs={
+                    'output': 'output',
+                    'exactly': True
+                },
+                text='hello'
+            )
+        except AssertionError as e:
+            assert_that(
+                str(e),
+                equal_to(
+                    'Comparison error. Diff:\n'
+                    '*** \n'
+                    '\n'
+                    '--- \n'
+                    '\n'
+                    '***************\n'
+                    '\n'
+                    '*** 1,2 ****\n'
+                    '\n'
+                    '  hello\n'
+                    '- \n'
+                    '--- 1 ----\n'
+                )
+            )
+        else:
+            raise AssertionError("stdout does not contain exact text")
+
+        # response does not contain new line
+        context = self.execute_module_step(
+            'run_command',
+            kwargs={
+                'command': 'printf "hello"',
+            }
+        )
+
+        try:
+            self.execute_module_step(
+                'output_should_contain_text',
+                context=context,
+                kwargs={
+                    'output': 'output',
+                    'exactly': True
+                },
+                text='hello\n'
+            )
+        except AssertionError as e:
+            assert_that(
+                str(e),
+                equal_to(
+                    'Comparison error. Diff:\n'
+                    '*** \n'
+                    '\n'
+                    '--- \n'
+                    '\n'
+                    '***************\n'
+                    '\n'
+                    '*** 1 ****\n'
+                    '\n'
+                    '--- 1,2 ----\n'
+                    '\n'
+                    '  hello\n'
+                    '+ '
+                )
+            )
+        else:
+            raise AssertionError("stdout does not contain exact text")
 
     def test_output_should_contain_text__stderr(self):
         not_existing_file_path = os.path.join(
