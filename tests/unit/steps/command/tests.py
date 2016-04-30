@@ -670,6 +670,17 @@ class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
                     }
                 }
             },
+            {
+                'value': 'the stdout should contain 1 line',
+                'expected': {
+                    'kwargs': {
+                        'output': 'stdout',
+                        'should_not': None,
+                        'comparison': None,
+                        'count': '1'
+                    }
+                }
+            },
         ],
         'exit_status_should_be': [
             {
