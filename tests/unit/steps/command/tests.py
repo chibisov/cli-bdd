@@ -328,6 +328,183 @@ class CommandStepsMixin(object):
             text='No such file or directory'
         )
 
+    def test_output_should_contain_lines__stdout(self):
+        context = self.execute_module_step(
+            'run_command',
+            kwargs={
+                'command': 'echo "hello\nworld\n"',
+            }
+        )
+
+        # stdout contains lines
+        self.execute_module_step(
+            'output_should_contain_lines',
+            context=context,
+            kwargs={
+                'output': 'output',
+                'count': '2'
+            }
+        )
+
+        # stdout does not contain lines
+        try:
+            self.execute_module_step(
+                'output_should_contain_lines',
+                context=context,
+                kwargs={
+                    'output': 'output',
+                    'should_not': 'not',
+                    'count': '2'
+                }
+            )
+        except AssertionError as e:
+            assert_that(
+                str(e),
+                equal_to(
+                    '\n'
+                    'Expected: not <2>\n'
+                    '     but: was <2>\n'
+                )
+            )
+        else:
+            raise AssertionError("stdout contains exact number of lines")
+
+        # stdout contains at least lines
+        self.execute_module_step(
+            'output_should_contain_lines',
+            context=context,
+            kwargs={
+                'output': 'output',
+                'comparison': ' at least',
+                'count': '1'
+            }
+        )
+
+        # stdout does not contain at least lines
+        try:
+            self.execute_module_step(
+                'output_should_contain_lines',
+                context=context,
+                kwargs={
+                    'output': 'output',
+                    'comparison': ' at least',
+                    'count': '3'
+                }
+            )
+        except AssertionError as e:
+            assert_that(
+                str(e),
+                equal_to(
+                    '\n'
+                    'Expected: a value greater than or equal to <3>\n'
+                    '     but: was <2>\n'
+                )
+            )
+        else:
+            raise AssertionError("stdout contains less than 3 lines")
+
+        # stdout contains up to lines
+        self.execute_module_step(
+            'output_should_contain_lines',
+            context=context,
+            kwargs={
+                'output': 'output',
+                'comparison': ' up to',
+                'count': '2'
+            }
+        )
+
+        # stdout does not contain up to lines
+        try:
+            self.execute_module_step(
+                'output_should_contain_lines',
+                context=context,
+                kwargs={
+                    'output': 'output',
+                    'comparison': ' up to',
+                    'count': '1'
+                }
+            )
+        except AssertionError as e:
+            assert_that(
+                str(e),
+                equal_to(
+                    '\n'
+                    'Expected: a value less than or equal to <1>\n'
+                    '     but: was <2>\n'
+                )
+            )
+        else:
+            raise AssertionError("stdout contains more than 1 line")
+
+        # stdout contains less than lines
+        self.execute_module_step(
+            'output_should_contain_lines',
+            context=context,
+            kwargs={
+                'output': 'output',
+                'comparison': ' less than',
+                'count': '3'
+            }
+        )
+
+        # stdout does not contain less than lines
+        try:
+            self.execute_module_step(
+                'output_should_contain_lines',
+                context=context,
+                kwargs={
+                    'output': 'output',
+                    'comparison': ' less than',
+                    'count': '2'
+                }
+            )
+        except AssertionError as e:
+            assert_that(
+                str(e),
+                equal_to(
+                    '\n'
+                    'Expected: a value less than <2>\n'
+                    '     but: was <2>\n'
+                )
+            )
+        else:
+            raise AssertionError("stdout contains exact 2 lines")
+
+        # stdout contains more than lines
+        self.execute_module_step(
+            'output_should_contain_lines',
+            context=context,
+            kwargs={
+                'output': 'output',
+                'comparison': ' more than',
+                'count': '1'
+            }
+        )
+
+        # stdout does not contain more than lines
+        try:
+            self.execute_module_step(
+                'output_should_contain_lines',
+                context=context,
+                kwargs={
+                    'output': 'output',
+                    'comparison': ' more than',
+                    'count': '2'
+                }
+            )
+        except AssertionError as e:
+            assert_that(
+                str(e),
+                equal_to(
+                    '\n'
+                    'Expected: a value greater than <2>\n'
+                    '     but: was <2>\n'
+                )
+            )
+        else:
+            raise AssertionError("stdout contains exact 2 lines")
+
     def test_exit_status_should_be(self):
         not_existing_file_path = os.path.join(
             tempfile.gettempdir(),
@@ -444,6 +621,52 @@ class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
                     'kwargs': {
                         'dialog_matcher': 'Login:',
                         'timeout': None
+                    }
+                }
+            },
+        ],
+        'output_should_contain_text': [
+            {
+                'value': 'the output should contain',
+                'expected': {
+                    'kwargs': {
+                        'output': 'output',
+                        'should_not': None,
+                        'exactly': None
+                    }
+                }
+            },
+            {
+                'value': 'the stderr should not contain exactly',
+                'expected': {
+                    'kwargs': {
+                        'output': 'stderr',
+                        'should_not': 'not',
+                        'exactly': 'exactly'
+                    }
+                }
+            },
+        ],
+        'output_should_contain_lines': [
+            {
+                'value': 'the output should contain 3 lines',
+                'expected': {
+                    'kwargs': {
+                        'output': 'output',
+                        'should_not': None,
+                        'comparison': None,
+                        'count': '3'
+                    }
+                }
+            },
+            {
+                'value': 'the stderr should not contain at least 3 lines',
+                'expected': {
+                    'kwargs': {
+                        'output': 'stderr',
+                        'should_not': 'not',
+                        'comparison': 'at least',
+                        'count': '3'
                     }
                 }
             },

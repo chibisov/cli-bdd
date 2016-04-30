@@ -2,7 +2,17 @@ import difflib
 import StringIO
 
 import pexpect
-from hamcrest import assert_that, contains_string, equal_to, is_, is_not
+from hamcrest import (
+    assert_that,
+    contains_string,
+    equal_to,
+    greater_than,
+    greater_than_or_equal_to,
+    is_,
+    is_not,
+    less_than,
+    less_than_or_equal_to
+)
 
 from cli_bdd.core.steps.base import StepBase
 
@@ -206,6 +216,58 @@ class OutputShouldContainText(StepBase):
                 raise
 
 
+class OutputShouldContainLines(StepBase):
+    '''Checks the command output number of lines.
+
+    Examples:
+
+    ```gherkin
+    Then the output should contain 3 lines
+    Then the output should not contain 3 lines
+    Then the output should contain up to 3 lines
+    Then the output should contain less than 3 lines
+    Then the output should contain at least 1 line
+    Then the output should contain more than 1 line
+    ```
+    '''
+    type_ = 'then'
+    sentence = (
+        'the (?P<output>(output|stderr|stdout)) '
+        'should( (?P<should_not>not))? '
+        'contain( '
+        '(?P<comparison>(up to|at least|more than|less than)))? '
+        '(?P<count>\d+) lines?'
+    )
+
+    def step(self, output, should_not=False, comparison=None, count=None):
+        child = self.get_scenario_context().command_response['child']
+        ensure_command_finished(child)
+        output = 'stdout' if output == 'output' else output
+        comparison = (comparison or '').strip()
+        count = int(count)
+
+        # todo: separate stdout and stderr
+        # todo: test stderr
+        data = child.logfile_read.getvalue().strip()
+        number_of_lines = len(data.splitlines())
+
+        bool_matcher = is_not if should_not else is_
+        comparison_matcher = {
+            '': equal_to,
+            'at least': greater_than_or_equal_to,
+            'up to': less_than_or_equal_to,
+            'less than': less_than,
+            'more than': greater_than,
+        }[comparison]
+
+        assert_that(
+            number_of_lines,
+            bool_matcher(
+                comparison_matcher(count)
+            )
+        )
+
+
 class ExitStatusShouldBe(StepBase):
     """Checks the command status code.
 
@@ -261,6 +323,10 @@ base_steps = [
     {
         'func_name': 'output_should_contain_text',
         'class': OutputShouldContainText
+    },
+    {
+        'func_name': 'output_should_contain_lines',
+        'class': OutputShouldContainLines
     },
     {
         'func_name': 'exit_status_should_be',
