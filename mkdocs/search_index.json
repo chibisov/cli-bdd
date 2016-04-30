@@ -1,0 +1,174 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "BDD for command-line applications\n\n\n\nInspired by \naruba\n.\n\n\nFeature: showing off cli-bdd\n\n    Scenario: create and remove file\n        Given I cd to \n/tmp/\n\n        Given a file \ntest.txt\n with \nsome text\n\n        When I run `rm -i test.txt` interactively\n        And I type \nYes\n\n        Then the file \n/tmp/test.txt\n should not exist\n\n\n\n\nSource repository on Github\n.\n\n\nInstallation:\n\n\n$ pip install cli-bdd\n\n\n\n\nRead the docs how to use \ncli-bdd\n with \nbehave\n and \nlettuce\n.", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/behave/", 
+            "text": "cli-bdd\n could be used with \nbehave\n.\n\n\nSteps\n\n\nIn your behave steps module import all the steps from \ncli-bdd\n:\n\n\nfrom cli_bdd.behave.steps import *\n\n\n\n\nThat's it. Now you can use all the steps in your scenarios.", 
+            "title": "Behave"
+        }, 
+        {
+            "location": "/behave/#steps", 
+            "text": "In your behave steps module import all the steps from  cli-bdd :  from cli_bdd.behave.steps import *  That's it. Now you can use all the steps in your scenarios.", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/lettuce/", 
+            "text": "Warning\n\n\nLettuce has a \nbug\n which\ndoesn't allow you to use it with \ncli-bdd\n yet. When the bug is fixed we will\nturn on functional test in \ntests/functional/lettuce/tests.py\n.\n\n\n\n\ncli-bdd\n could be used with \nlettuce\n (not yet).\n\n\nSteps\n\n\nIn your lettuce steps module import all the steps from \ncli-bdd\n:\n\n\nfrom cli_bdd.lettuce.steps import *\n\n\n\n\nThat's it. Now you can use all the steps in your scenarios.", 
+            "title": "Lettuce"
+        }, 
+        {
+            "location": "/lettuce/#steps", 
+            "text": "In your lettuce steps module import all the steps from  cli-bdd :  from cli_bdd.lettuce.steps import *  That's it. Now you can use all the steps in your scenarios.", 
+            "title": "Steps"
+        }, 
+        {
+            "location": "/steps/environment/", 
+            "text": "Module: \ncli_bdd.core.steps.environment\n\n\nset_the_environment_variable\n\n\nSets the environment variable.\n\n\nExamples:\n\n\nGiven I set the environment variable \nhello\n to \nworld\n\n\n\n\n\nMatcher:\n\n\nI set the environment variable \n(?P\nvariable\n.*)\n to \n(?P\nvalue\n.*)\n\n\n\n\n\nappend_to_the_environment_variable\n\n\nAppends a value to the environment variable.\n\n\nExamples:\n\n\nGiven I append \nworld\n to the environment variable \nhello\n\n\n\n\n\nMatcher:\n\n\nI append \n(?P\nvalue\n.*)\n to the environment variable \n(?P\nvariable\n.*)\n\n\n\n\n\nprepend_to_the_environment_variable\n\n\nPrepends a value to the environment variable.\n\n\nExamples:\n\n\nGiven I prepend \nworld\n to the environment variable \nhello\n\n\n\n\n\nMatcher:\n\n\nI prepend \n(?P\nvalue\n.*)\n to the environment variable \n(?P\nvariable\n.*)\n\n\n\n\n\nset_the_environment_variables\n\n\nPopulates the set of the environment variables.\n\n\nExamples:\n\n\nGiven I set the environment variables to:\n    | variable | value |\n    | age      | 25    |\n    | name     | gena  |\n\n\n\n\nMatcher:\n\n\nI set the environment variables to\n\n\n\n\nappend_the_values_to_the_environment_variables\n\n\nAppends the values to the set of the environment variables.\n\n\nExamples:\n\n\nI append the values to the environment variables:\n    | variable | value |\n    | age      | 1     |\n    | name     | a     |\n\n\n\n\nMatcher:\n\n\nI append the values to the environment variables\n\n\n\n\nprepend_the_values_to_the_environment_variables\n\n\nPrepends the values to the set of the environment variables.\n\n\nExamples:\n\n\nI prepend the values to the environment variables:\n    | variable | value |\n    | age      | 1     |\n    | name     | a     |\n\n\n\n\nMatcher:\n\n\nI prepend the values to the environment variables", 
+            "title": "Environment"
+        }, 
+        {
+            "location": "/steps/environment/#set_the_environment_variable", 
+            "text": "Sets the environment variable.  Examples:  Given I set the environment variable  hello  to  world   Matcher:  I set the environment variable  (?P variable .*)  to  (?P value .*)", 
+            "title": "set_the_environment_variable"
+        }, 
+        {
+            "location": "/steps/environment/#append_to_the_environment_variable", 
+            "text": "Appends a value to the environment variable.  Examples:  Given I append  world  to the environment variable  hello   Matcher:  I append  (?P value .*)  to the environment variable  (?P variable .*)", 
+            "title": "append_to_the_environment_variable"
+        }, 
+        {
+            "location": "/steps/environment/#prepend_to_the_environment_variable", 
+            "text": "Prepends a value to the environment variable.  Examples:  Given I prepend  world  to the environment variable  hello   Matcher:  I prepend  (?P value .*)  to the environment variable  (?P variable .*)", 
+            "title": "prepend_to_the_environment_variable"
+        }, 
+        {
+            "location": "/steps/environment/#set_the_environment_variables", 
+            "text": "Populates the set of the environment variables.  Examples:  Given I set the environment variables to:\n    | variable | value |\n    | age      | 25    |\n    | name     | gena  |  Matcher:  I set the environment variables to", 
+            "title": "set_the_environment_variables"
+        }, 
+        {
+            "location": "/steps/environment/#append_the_values_to_the_environment_variables", 
+            "text": "Appends the values to the set of the environment variables.  Examples:  I append the values to the environment variables:\n    | variable | value |\n    | age      | 1     |\n    | name     | a     |  Matcher:  I append the values to the environment variables", 
+            "title": "append_the_values_to_the_environment_variables"
+        }, 
+        {
+            "location": "/steps/environment/#prepend_the_values_to_the_environment_variables", 
+            "text": "Prepends the values to the set of the environment variables.  Examples:  I prepend the values to the environment variables:\n    | variable | value |\n    | age      | 1     |\n    | name     | a     |  Matcher:  I prepend the values to the environment variables", 
+            "title": "prepend_the_values_to_the_environment_variables"
+        }, 
+        {
+            "location": "/steps/file/", 
+            "text": "Module: \ncli_bdd.core.steps.file\n\n\ncopy_file_or_directory\n\n\nCopies a file or directory.\n\n\nExamples:\n\n\nGiven I copy a file from \n/tmp/old.txt\n to \n/var/new.txt\n\nGiven I copy the file named \nhello.txt\n to \n/var/\n\nGiven I copy a directory from \n/tmp/hello/\n to \n/var/\n\n\n\n\n\nMatcher:\n\n\nI copy (a|the) (?P\nfile_or_directory\n(file|directory))( (named|from))? \n(?P\nsource\n[^\n]*)\n to \n(?P\ndestination\n[^\n]*)\n\n\n\n\n\nmove_file_or_directory\n\n\nMoves a file or directory.\n\n\nExamples:\n\n\nGiven I move a file from \n/tmp/old.txt\n to \n/var/new.txt\n\nGiven I move the file named \nhello.txt\n to \n/var/\n\nGiven I move a directory from \n/tmp/hello/\n to \n/var/\n\n\n\n\n\nMatcher:\n\n\nI move (a|the) (?P\nfile_or_directory\n(file|directory))( (named|from))? \n(?P\nsource\n[^\n]*)\n to \n(?P\ndestination\n[^\n]*)\n\n\n\n\n\ncreate_directory\n\n\nCreates directory.\n\n\nExamples:\n\n\nGiven a directory \n/tmp/test/\n\nGiven the directory named \n/tmp/test/\n\n\n\n\n\nMatcher:\n\n\n(a|the) directory( named)? \n(?P\ndir_path\n[^\n]*)\n\n\n\n\n\nchange_directory\n\n\nChange directory.\n\n\nExamples:\n\n\nGiven I cd to \n/tmp/test/\n\n\n\n\n\nMatcher:\n\n\nI cd to \n(?P\ndir_path\n[^\n]*)\n\n\n\n\n\ncreate_file_with_content\n\n\nCreates a file.\n\n\nExamples:\n\n\nGiven a file \n/tmp/test/\n with \nsome content\n\nGiven the file named \n/tmp/test/\n with \nanother content\n\n\n\n\n\nMatcher:\n\n\n(a|the) file( named)? \n(?P\nfile_path\n[^\n]*)\n with \n(?P\nfile_content\n[^\n]*)\n\n\n\n\n\ncreate_file_with_multiline_content\n\n\nCreates a file with multiline content.\n\n\nExamples:\n\n\nGiven a file \n/tmp/test/\n with:\n    \n\n    line one\n    line two\n    line three\n    \n\n\nGiven a file named \n/tmp/test/\n with:\n    \n\n    line one\n    line two\n    line three\n    \n\n\n\n\n\nMatcher:\n\n\n(a|the) file( named)? \n(?P\nfile_path\n[^\n]*)\n with\n\n\n\n\ncheck_file_or_directory_exist\n\n\nChecks whether file or directory exist.\n\n\nExamples:\n\n\nThen a file \n/var/new.txt\n should exist\nThen the file named \n/var/new.txt\n should not exist\nThen the directory \n/var/\n should not exist\n\n\n\n\nMatcher:\n\n\n(a|the) (?P\nfile_or_directory\n(file|directory))( (named|from))? \n(?P\npath\n[^\n]*)\n should( (?P\nshould_not\nnot))? exist", 
+            "title": "File"
+        }, 
+        {
+            "location": "/steps/file/#copy_file_or_directory", 
+            "text": "Copies a file or directory.  Examples:  Given I copy a file from  /tmp/old.txt  to  /var/new.txt \nGiven I copy the file named  hello.txt  to  /var/ \nGiven I copy a directory from  /tmp/hello/  to  /var/   Matcher:  I copy (a|the) (?P file_or_directory (file|directory))( (named|from))?  (?P source [^ ]*)  to  (?P destination [^ ]*)", 
+            "title": "copy_file_or_directory"
+        }, 
+        {
+            "location": "/steps/file/#move_file_or_directory", 
+            "text": "Moves a file or directory.  Examples:  Given I move a file from  /tmp/old.txt  to  /var/new.txt \nGiven I move the file named  hello.txt  to  /var/ \nGiven I move a directory from  /tmp/hello/  to  /var/   Matcher:  I move (a|the) (?P file_or_directory (file|directory))( (named|from))?  (?P source [^ ]*)  to  (?P destination [^ ]*)", 
+            "title": "move_file_or_directory"
+        }, 
+        {
+            "location": "/steps/file/#create_directory", 
+            "text": "Creates directory.  Examples:  Given a directory  /tmp/test/ \nGiven the directory named  /tmp/test/   Matcher:  (a|the) directory( named)?  (?P dir_path [^ ]*)", 
+            "title": "create_directory"
+        }, 
+        {
+            "location": "/steps/file/#change_directory", 
+            "text": "Change directory.  Examples:  Given I cd to  /tmp/test/   Matcher:  I cd to  (?P dir_path [^ ]*)", 
+            "title": "change_directory"
+        }, 
+        {
+            "location": "/steps/file/#create_file_with_content", 
+            "text": "Creates a file.  Examples:  Given a file  /tmp/test/  with  some content \nGiven the file named  /tmp/test/  with  another content   Matcher:  (a|the) file( named)?  (?P file_path [^ ]*)  with  (?P file_content [^ ]*)", 
+            "title": "create_file_with_content"
+        }, 
+        {
+            "location": "/steps/file/#create_file_with_multiline_content", 
+            "text": "Creates a file with multiline content.  Examples:  Given a file  /tmp/test/  with:\n     \n    line one\n    line two\n    line three\n     \n\nGiven a file named  /tmp/test/  with:\n     \n    line one\n    line two\n    line three\n       Matcher:  (a|the) file( named)?  (?P file_path [^ ]*)  with", 
+            "title": "create_file_with_multiline_content"
+        }, 
+        {
+            "location": "/steps/file/#check_file_or_directory_exist", 
+            "text": "Checks whether file or directory exist.  Examples:  Then a file  /var/new.txt  should exist\nThen the file named  /var/new.txt  should not exist\nThen the directory  /var/  should not exist  Matcher:  (a|the) (?P file_or_directory (file|directory))( (named|from))?  (?P path [^ ]*)  should( (?P should_not not))? exist", 
+            "title": "check_file_or_directory_exist"
+        }, 
+        {
+            "location": "/steps/command/", 
+            "text": "Module: \ncli_bdd.core.steps.command\n\n\nrun_command\n\n\nRuns a command.\n\n\nExamples:\n\n\nWhen I run `echo hello`\n\n\n\n\nMatcher:\n\n\nI run `(?P\ncommand\n[^`]*)`\n\n\n\n\nsuccessfully_run_command\n\n\nRuns a command and checks it for successfull status.\n\n\nExamples:\n\n\nWhen I successfully run `echo hello`\n\n\n\n\nMatcher:\n\n\nI successfully run `(?P\ncommand\n.*)`\n\n\n\n\nrun_command_interactively\n\n\nRuns a command in interactive mode.\n\n\nExamples:\n\n\nWhen I run `rm -i hello.txt` interactively\n\n\n\n\nMatcher:\n\n\nI run `(?P\ncommand\n[^`]*)` interactively\n\n\n\n\ntype_into_command\n\n\nTypes an input into the previously ran in interactive mode command.\n\n\nExamples:\n\n\nWhen I type \nYes\n\n\n\n\n\nMatcher:\n\n\nI type \n(?P\ninput_\n[^\n]*)\n\n\n\n\n\ngot_interactive_dialog\n\n\nWaits for a dialog.\n\n\nBy default waits for 1 second. Timeout could be changed by providing\n\nin N seconds\n information.\n\n\nExamples:\n\n\nWhen I got \nPassword:\n for interactive dialog\nWhen I got \nPassword:\n for interactive dialog in 1 second\nWhen I got \nName .*: \n for interactive dialog in 0.01 seconds\n\n\n\n\nMatcher:\n\n\nI got \n(?P\ndialog_matcher\n[^\n]*)\n for interactive dialog( in (?P\ntimeout\n(\\d*[.])?\\d+) seconds?)?\n\n\n\n\noutput_should_contain_text\n\n\nChecks the command output (stdout, stderr).\n\n\nExamples:\n\n\nThen the output should contain:\n    \n\n    hello\n    \n\n\nThen the output should contain exactly:\n    \n\n    hello\n    \n\n\nThen the stderr should not contain exactly:\n    \n\n    hello\n    \n\n\n\n\n\nMatcher:\n\n\nthe (?P\noutput\n(output|stderr|stdout)) should( (?P\nshould_not\nnot))? contain( (?P\nexactly\nexactly))?\n\n\n\n\noutput_should_contain_lines\n\n\nChecks the command output number of lines.\n\n\nExamples:\n\n\nThen the output should contain 3 lines\nThen the output should not contain 3 lines\nThen the output should contain up to 3 lines\nThen the output should contain less than 3 lines\nThen the output should contain at least 1 line\nThen the output should contain more than 1 line\n\n\n\n\nMatcher:\n\n\nthe (?P\noutput\n(output|stderr|stdout)) should( (?P\nshould_not\nnot))? contain( (?P\ncomparison\n(up to|at least|more than|less than)))? (?P\ncount\n\\d+) lines?\n\n\n\n\nexit_status_should_be\n\n\nChecks the command status code.\n\n\nExamples:\n\n\nThen the exit status should be 1\nThen the exit status should not be 1\n\n\n\n\nMatcher:\n\n\nthe exit status should( (?P\nshould_not\nnot))? be (?P\nexit_status\n\\d+)", 
+            "title": "Command"
+        }, 
+        {
+            "location": "/steps/command/#run_command", 
+            "text": "Runs a command.  Examples:  When I run `echo hello`  Matcher:  I run `(?P command [^`]*)`", 
+            "title": "run_command"
+        }, 
+        {
+            "location": "/steps/command/#successfully_run_command", 
+            "text": "Runs a command and checks it for successfull status.  Examples:  When I successfully run `echo hello`  Matcher:  I successfully run `(?P command .*)`", 
+            "title": "successfully_run_command"
+        }, 
+        {
+            "location": "/steps/command/#run_command_interactively", 
+            "text": "Runs a command in interactive mode.  Examples:  When I run `rm -i hello.txt` interactively  Matcher:  I run `(?P command [^`]*)` interactively", 
+            "title": "run_command_interactively"
+        }, 
+        {
+            "location": "/steps/command/#type_into_command", 
+            "text": "Types an input into the previously ran in interactive mode command.  Examples:  When I type  Yes   Matcher:  I type  (?P input_ [^ ]*)", 
+            "title": "type_into_command"
+        }, 
+        {
+            "location": "/steps/command/#got_interactive_dialog", 
+            "text": "Waits for a dialog.  By default waits for 1 second. Timeout could be changed by providing in N seconds  information.  Examples:  When I got  Password:  for interactive dialog\nWhen I got  Password:  for interactive dialog in 1 second\nWhen I got  Name .*:   for interactive dialog in 0.01 seconds  Matcher:  I got  (?P dialog_matcher [^ ]*)  for interactive dialog( in (?P timeout (\\d*[.])?\\d+) seconds?)?", 
+            "title": "got_interactive_dialog"
+        }, 
+        {
+            "location": "/steps/command/#output_should_contain_text", 
+            "text": "Checks the command output (stdout, stderr).  Examples:  Then the output should contain:\n     \n    hello\n     \n\nThen the output should contain exactly:\n     \n    hello\n     \n\nThen the stderr should not contain exactly:\n     \n    hello\n       Matcher:  the (?P output (output|stderr|stdout)) should( (?P should_not not))? contain( (?P exactly exactly))?", 
+            "title": "output_should_contain_text"
+        }, 
+        {
+            "location": "/steps/command/#output_should_contain_lines", 
+            "text": "Checks the command output number of lines.  Examples:  Then the output should contain 3 lines\nThen the output should not contain 3 lines\nThen the output should contain up to 3 lines\nThen the output should contain less than 3 lines\nThen the output should contain at least 1 line\nThen the output should contain more than 1 line  Matcher:  the (?P output (output|stderr|stdout)) should( (?P should_not not))? contain( (?P comparison (up to|at least|more than|less than)))? (?P count \\d+) lines?", 
+            "title": "output_should_contain_lines"
+        }, 
+        {
+            "location": "/steps/command/#exit_status_should_be", 
+            "text": "Checks the command status code.  Examples:  Then the exit status should be 1\nThen the exit status should not be 1  Matcher:  the exit status should( (?P should_not not))? be (?P exit_status \\d+)", 
+            "title": "exit_status_should_be"
+        }, 
+        {
+            "location": "/development/", 
+            "text": "Tests\n\n\nInstall tox:\n\n\n$ pip install tox\n\n\n\nRun all tests:\n\n\n$ tox\n\n\n\nRunning tests just for one environment:\n\n\n$ tox -e py3\n\n\n\nRunning tests from directory:\n\n\n$ tox -e py3 -- tests.unit.steps.environment\n\n\n\nRunning the specific test case:\n\n\n$ tox -e py3 -- tests.unit.steps.environment:TestBehaveEnvironmentSteps\n\n\n\nCodestyle\n\n\nChecking for pep:\n\n\n$ tox -e flake8\n\n\n\nChecking for imports:\n\n\n$ tox -e isort\n\n\n\nIf you have any problems with imports just run automatic manual fix:\n\n\n$ tox -e isort-fix\n\n\n\nDocumentation\n\n\nDocumentation is generated by \nhttp://www.mkdocs.org/\n\n\n$ pip install -r requirements/docs.txt\n$ invoke build-docs\n\n\n\nFor development:\n\n\n$ invoke serve-docs\n\n\n\nPublishing new releases\n\n\nIncrement version in \ncli_bdd/__init__.py\n. For example:\n\n\n__version__ = '0.0.2'  # from 0.0.1\n\n\n\nRun tests.\n\n\nCommit changes with message \"Version 0.0.2\"\n\n\nPublish to pypi:\n\n\n$ python setup.py publish\n\n\n\nAdd new tag version for commit:\n\n\n$ git tag 0.0.2\n\n\n\nPush to master with tags:\n\n\n$ git push origin master --tags", 
+            "title": "Development"
+        }, 
+        {
+            "location": "/development/#tests", 
+            "text": "Install tox:  $ pip install tox  Run all tests:  $ tox  Running tests just for one environment:  $ tox -e py3  Running tests from directory:  $ tox -e py3 -- tests.unit.steps.environment  Running the specific test case:  $ tox -e py3 -- tests.unit.steps.environment:TestBehaveEnvironmentSteps", 
+            "title": "Tests"
+        }, 
+        {
+            "location": "/development/#codestyle", 
+            "text": "Checking for pep:  $ tox -e flake8  Checking for imports:  $ tox -e isort  If you have any problems with imports just run automatic manual fix:  $ tox -e isort-fix", 
+            "title": "Codestyle"
+        }, 
+        {
+            "location": "/development/#documentation", 
+            "text": "Documentation is generated by  http://www.mkdocs.org/  $ pip install -r requirements/docs.txt\n$ invoke build-docs  For development:  $ invoke serve-docs", 
+            "title": "Documentation"
+        }, 
+        {
+            "location": "/development/#publishing-new-releases", 
+            "text": "Increment version in  cli_bdd/__init__.py . For example:  __version__ = '0.0.2'  # from 0.0.1  Run tests.  Commit changes with message \"Version 0.0.2\"  Publish to pypi:  $ python setup.py publish  Add new tag version for commit:  $ git tag 0.0.2  Push to master with tags:  $ git push origin master --tags", 
+            "title": "Publishing new releases"
+        }
+    ]
+}

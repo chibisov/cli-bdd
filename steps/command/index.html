@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <title>Command - BDD for command-line applications</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Command";
+    var mkdocs_page_input_path = "steps/command.md";
+    var mkdocs_page_url = "/steps/command/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> BDD for command-line applications</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../behave/">Behave</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../lettuce/">Lettuce</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Steps</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../environment/">Environment</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../file/">File</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Command</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#run_command">run_command</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#successfully_run_command">successfully_run_command</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#run_command_interactively">run_command_interactively</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#type_into_command">type_into_command</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#got_interactive_dialog">got_interactive_dialog</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#output_should_contain_text">output_should_contain_text</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#output_should_contain_lines">output_should_contain_lines</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#exit_status_should_be">exit_status_should_be</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../development/">Development</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">BDD for command-line applications</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Steps &raquo;</li>
+        
+      
+    
+    <li>Command</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p>Module: <code>cli_bdd.core.steps.command</code></p>
+<h3 id="run_command"><a class="toclink" href="#run_command">run_command</a></h3>
+<p>Runs a command.</p>
+<p>Examples:</p>
+<pre><code class="gherkin">When I run `echo hello`
+</code></pre>
+
+<p>Matcher:</p>
+<pre><code>I run `(?P&lt;command&gt;[^`]*)`
+</code></pre>
+
+<h3 id="successfully_run_command"><a class="toclink" href="#successfully_run_command">successfully_run_command</a></h3>
+<p>Runs a command and checks it for successfull status.</p>
+<p>Examples:</p>
+<pre><code class="gherkin">When I successfully run `echo hello`
+</code></pre>
+
+<p>Matcher:</p>
+<pre><code>I successfully run `(?P&lt;command&gt;.*)`
+</code></pre>
+
+<h3 id="run_command_interactively"><a class="toclink" href="#run_command_interactively">run_command_interactively</a></h3>
+<p>Runs a command in interactive mode.</p>
+<p>Examples:</p>
+<pre><code class="gherkin">When I run `rm -i hello.txt` interactively
+</code></pre>
+
+<p>Matcher:</p>
+<pre><code>I run `(?P&lt;command&gt;[^`]*)` interactively
+</code></pre>
+
+<h3 id="type_into_command"><a class="toclink" href="#type_into_command">type_into_command</a></h3>
+<p>Types an input into the previously ran in interactive mode command.</p>
+<p>Examples:</p>
+<pre><code class="gherkin">When I type &quot;Yes&quot;
+</code></pre>
+
+<p>Matcher:</p>
+<pre><code>I type &quot;(?P&lt;input_&gt;[^&quot;]*)&quot;
+</code></pre>
+
+<h3 id="got_interactive_dialog"><a class="toclink" href="#got_interactive_dialog">got_interactive_dialog</a></h3>
+<p>Waits for a dialog.</p>
+<p>By default waits for 1 second. Timeout could be changed by providing
+<code>in N seconds</code> information.</p>
+<p>Examples:</p>
+<pre><code class="gherkin">When I got &quot;Password:&quot; for interactive dialog
+When I got &quot;Password:&quot; for interactive dialog in 1 second
+When I got &quot;Name .*: &quot; for interactive dialog in 0.01 seconds
+</code></pre>
+
+<p>Matcher:</p>
+<pre><code>I got &quot;(?P&lt;dialog_matcher&gt;[^&quot;]*)&quot; for interactive dialog( in (?P&lt;timeout&gt;(\d*[.])?\d+) seconds?)?
+</code></pre>
+
+<h3 id="output_should_contain_text"><a class="toclink" href="#output_should_contain_text">output_should_contain_text</a></h3>
+<p>Checks the command output (stdout, stderr).</p>
+<p>Examples:</p>
+<pre><code class="gherkin">Then the output should contain:
+    &quot;&quot;&quot;
+    hello
+    &quot;&quot;&quot;
+
+Then the output should contain exactly:
+    &quot;&quot;&quot;
+    hello
+    &quot;&quot;&quot;
+
+Then the stderr should not contain exactly:
+    &quot;&quot;&quot;
+    hello
+    &quot;&quot;&quot;
+</code></pre>
+
+<p>Matcher:</p>
+<pre><code>the (?P&lt;output&gt;(output|stderr|stdout)) should( (?P&lt;should_not&gt;not))? contain( (?P&lt;exactly&gt;exactly))?
+</code></pre>
+
+<h3 id="output_should_contain_lines"><a class="toclink" href="#output_should_contain_lines">output_should_contain_lines</a></h3>
+<p>Checks the command output number of lines.</p>
+<p>Examples:</p>
+<pre><code class="gherkin">Then the output should contain 3 lines
+Then the output should not contain 3 lines
+Then the output should contain up to 3 lines
+Then the output should contain less than 3 lines
+Then the output should contain at least 1 line
+Then the output should contain more than 1 line
+</code></pre>
+
+<p>Matcher:</p>
+<pre><code>the (?P&lt;output&gt;(output|stderr|stdout)) should( (?P&lt;should_not&gt;not))? contain( (?P&lt;comparison&gt;(up to|at least|more than|less than)))? (?P&lt;count&gt;\d+) lines?
+</code></pre>
+
+<h3 id="exit_status_should_be"><a class="toclink" href="#exit_status_should_be">exit_status_should_be</a></h3>
+<p>Checks the command status code.</p>
+<p>Examples:</p>
+<pre><code class="gherkin">Then the exit status should be 1
+Then the exit status should not be 1
+</code></pre>
+
+<p>Matcher:</p>
+<pre><code>the exit status should( (?P&lt;should_not&gt;not))? be (?P&lt;exit_status&gt;\d+)
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../development/" class="btn btn-neutral float-right" title="Development">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../file/" class="btn btn-neutral" title="File"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../file/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../development/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
