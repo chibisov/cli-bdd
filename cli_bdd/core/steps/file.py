@@ -166,6 +166,43 @@ class CheckFileOrDirectoryExist(StepBase):
         )
 
 
+class RemoveDirectoryContent(StepBase):
+    """Remove content of directory.
+
+    Examples:
+
+    ```gherkin
+    Given the directory "/var/" empty
+    ```
+    """
+    type_ = 'given'
+    sentence = (
+        'the directory "(?P<path>[^"]*)" empty'
+    )
+
+    def step(self, path):
+        shutil.rmtree(path)
+
+
+class RemoveDirectory(StepBase):
+    """Remove Directory.
+
+    Examples:
+
+    ```gherkin
+    Given the directory "/var/" removed
+    ```
+    """
+    type_ = 'given'
+    sentence = (
+        'the directory "(?P<path>[^"]*)" removed'
+    )
+
+    def step(self, path):
+        shutil.rmtree(path)
+        os.rmdir(path)
+
+
 base_steps = [
     {
         'func_name': 'copy_file_or_directory',
@@ -194,5 +231,13 @@ base_steps = [
     {
         'func_name': 'check_file_or_directory_exist',
         'class': CheckFileOrDirectoryExist
+    },
+    {
+        'func_name': 'remove_directory_content',
+        'class': RemoveDirectoryContent
+    },
+    {
+        'func_name': 'remove_directory',
+        'class': RemoveDirectory
     }
 ]
