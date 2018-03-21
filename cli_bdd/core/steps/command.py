@@ -17,12 +17,12 @@ from hamcrest import (
 from cli_bdd.core.steps.base import StepBase
 
 
-def run(command, fail_on_error=False, interactively=False):
+def run(command, fail_on_error=False, interactively=False, timeout=30):
     child = pexpect.spawn('/bin/sh', ['-c', command], echo=False)
     child.logfile_read = StringIO.StringIO()
     child.logfile_send = StringIO.StringIO()
     if not interactively:
-        child.expect(pexpect.EOF)
+        child.expect(pexpect.EOF, timeout=timeout)
         if fail_on_error and child.exitstatus > 0:
             raise Exception(
                 '%s (exit code %s)' % (
@@ -49,10 +49,13 @@ class RunCommand(StepBase):
     ```
     """
     type_ = 'when'
-    sentence = 'I run `(?P<command>[^`]*)`'
+    sentence = (
+        'I run `(?P<command>[^`]*)`'
+        '( in (?P<timeout>(\d*[.])?\d+) seconds?)?'
+    )
 
-    def step(self, command):
-        self.get_scenario_context().command_response = run(command)
+    def step(self, command, timeout):
+        self.get_scenario_context().command_response = run(command, timeout=timeout)
 
 
 class SuccessfullyRunCommand(StepBase):
