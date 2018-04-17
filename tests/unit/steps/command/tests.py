@@ -28,6 +28,7 @@ class CommandStepsMixin(object):
             'run_command',
             kwargs={
                 'command': 'echo "hello" > %s' % file_path,
+                'timeout': 30
             }
         )
         assert_that(open(file_path).read(), equal_to('hello\n'))
@@ -156,6 +157,7 @@ class CommandStepsMixin(object):
             'run_command',
             kwargs={
                 'command': 'echo "hello"',
+                'timeout': 30
             }
         )
 
@@ -225,6 +227,7 @@ class CommandStepsMixin(object):
             'run_command',
             kwargs={
                 'command': 'echo "hello"',
+                'timeout': 30
             }
         )
 
@@ -264,6 +267,7 @@ class CommandStepsMixin(object):
             'run_command',
             kwargs={
                 'command': 'printf "hello"',
+                'timeout': 30
             }
         )
 
@@ -315,6 +319,7 @@ class CommandStepsMixin(object):
             'run_command',
             kwargs={
                 'command': 'rm %s' % not_existing_file_path,
+                'timeout': 30
             }
         )
 
@@ -333,6 +338,7 @@ class CommandStepsMixin(object):
             'run_command',
             kwargs={
                 'command': 'echo "hello\nworld\n"',
+                'timeout': 30
             }
         )
 
@@ -521,6 +527,7 @@ class CommandStepsMixin(object):
             'run_command',
             kwargs={
                 'command': 'rm %s' % not_existing_file_path,
+                'timeout': 30
             }
         )
 
@@ -557,7 +564,8 @@ class TestCommandStepsSentenceRegex(StepsSentenceRegexTestMixin, TestCase):
                 'value': 'I run `sosisa`',
                 'expected': {
                     'kwargs': {
-                        'command': 'sosisa'
+                        'command': 'sosisa',
+                        'timeout': None
                     }
                 }
             }
