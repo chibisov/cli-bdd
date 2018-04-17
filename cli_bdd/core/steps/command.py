@@ -55,7 +55,8 @@ class RunCommand(StepBase):
     )
 
     def step(self, command, timeout):
-        self.get_scenario_context().command_response = run(command, timeout=timeout)
+        self.get_scenario_context().command_response = run(command,
+                                                           timeout=timeout)
 
 
 class SuccessfullyRunCommand(StepBase):
