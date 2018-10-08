@@ -1,5 +1,5 @@
 import difflib
-import StringIO
+import io
 
 import pexpect
 from hamcrest import (
@@ -18,9 +18,9 @@ from cli_bdd.core.steps.base import StepBase
 
 
 def run(command, fail_on_error=False, interactively=False, timeout=30):
-    child = pexpect.spawn('/bin/sh', ['-c', command], echo=False)
-    child.logfile_read = StringIO.StringIO()
-    child.logfile_send = StringIO.StringIO()
+    child = pexpect.spawn('/bin/sh', ['-c', command], echo=False, encoding='utf-8')
+    child.logfile_read = io.StringIO()
+    child.logfile_send = io.StringIO()
     if not interactively:
         child.expect(pexpect.EOF, timeout=timeout)
         if fail_on_error and child.exitstatus > 0:
@@ -188,12 +188,13 @@ class OutputShouldContainText(StepBase):
 
         # todo: separate stdout and stderr
         # todo: test replace
-        data = child.logfile_read.getvalue().replace('\r\n', '\n')
+        # note: unhappy about stripping null characters here.
+        data = child.logfile_read.getvalue().replace('\r\n', '\n').replace('\x00', '')
         data_lines = data.splitlines()
         if data.endswith('\n'):
             data_lines.append('')
 
-        expected = self.get_text().encode('utf-8')  # todo: test encode
+        expected = self.get_text()
         expected_lines = expected.splitlines()
         if expected.endswith('\n'):
             expected_lines.append('')

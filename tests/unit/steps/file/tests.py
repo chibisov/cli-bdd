@@ -6,10 +6,8 @@ from hamcrest import assert_that, calling, equal_to, is_not, raises
 
 from cli_bdd.behave.steps import file as behave_file
 from cli_bdd.core.steps.file import base_steps
-from cli_bdd.lettuce.steps import file as lettuce_file
 from testutils import (
     BehaveStepsTestMixin,
-    LettuceStepsTestMixin,
     StepsSentenceRegexTestMixin,
     TestCase
 )
@@ -22,7 +20,7 @@ class FileStepsMixin(object):
         new_file_path = os.path.join(tempfile.gettempdir(), 'new_file.txt')
 
         # add content to original file
-        with open(original_file_path, 'wr') as ff:
+        with open(original_file_path, 'w+') as ff:
             ff.write(original_file_text)
 
         try:
@@ -65,7 +63,7 @@ class FileStepsMixin(object):
         os.makedirs(original_subdir_path)
 
         # add content to original file
-        with open(original_subdir_path_file, 'wr') as ff:
+        with open(original_subdir_path_file, 'w+') as ff:
             ff.write(original_subdir_path_file_content)
 
         try:
@@ -93,7 +91,7 @@ class FileStepsMixin(object):
         new_file_path = os.path.join(tempfile.gettempdir(), 'new_file.txt')
 
         # add content to original file
-        with open(original_file_path, 'wr') as ff:
+        with open(original_file_path, 'w+') as ff:
             ff.write(original_file_text)
 
         try:
@@ -137,7 +135,7 @@ class FileStepsMixin(object):
         os.makedirs(original_subdir_path)
 
         # add content to original file
-        with open(original_subdir_path_file, 'wr') as ff:
+        with open(original_subdir_path_file, 'w+') as ff:
             ff.write(original_subdir_path_file_content)
 
         try:
@@ -559,9 +557,3 @@ class TestFileBehaveSteps(BehaveStepsTestMixin,
                           FileStepsMixin,
                           TestCase):
     module = behave_file
-
-
-class TestFileLettuceSteps(LettuceStepsTestMixin,
-                           FileStepsMixin,
-                           TestCase):
-    module = lettuce_file

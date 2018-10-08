@@ -51,5 +51,5 @@ def serve_docs():
 @task(name='generate-api-reference')
 def generate_api_reference():
     from docs.generator import generate_api_reference
-    print 'Generating API reference'
+    print('Generating API reference')
     generate_api_reference()

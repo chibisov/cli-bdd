@@ -40,7 +40,7 @@ def _prepare_docstring(value):
     return re.sub(
         r'^ {%s}' % remove_spaces,
         '',
-        unicode(value),
+        str(value),
         flags=re.MULTILINE
     ).strip()
 

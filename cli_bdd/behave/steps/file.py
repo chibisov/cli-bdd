@@ -7,4 +7,4 @@ steps = build_steps(
     base_steps=base_steps
 )
 locals().update(steps)
-__all__ = steps.keys()
+__all__ = list(steps.keys())

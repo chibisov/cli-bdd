@@ -4,8 +4,6 @@ import unittest
 from hamcrest import assert_that, equal_to
 
 from cli_bdd.behave import steps as behave_steps_root_module
-from cli_bdd.lettuce import steps as lettuce_steps_root_module
-from cli_bdd.lettuce.steps.mixins import LettuceStepMixin
 from mock import Mock, patch
 
 
@@ -18,7 +16,7 @@ class StepsSentenceRegexTestMixin(object):
     steps = None
 
     def test_experiments(self):
-        for step_func_name, step_exp in self.step_experiments.items():
+        for step_func_name, step_exp in list(self.step_experiments.items()):
             sentence = self._get_sentence_by_step_func_name(step_func_name)
             for exp in step_exp:
                 result = re.search(sentence, exp['value'])
@@ -83,20 +81,3 @@ class BehaveStepsTestMixin(StepsTestMixin):
         getattr(self.module, name)(context, **kwargs)
         return context
 
-
-class LettuceStepsTestMixin(StepsTestMixin):
-    module = None
-    root_module = lettuce_steps_root_module
-
-    def _execute_module_step(self, name, context, kwargs, table, text):
-        step_context = Mock()
-        step_context.hashes = table
-        step_context.multiline = text
-
-        with patch.object(
-            LettuceStepMixin,
-            'get_scenario_context',
-            lambda self: context
-        ):
-            getattr(self.module, name)(step_context, **kwargs)
-        return context

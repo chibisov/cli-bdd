@@ -17,7 +17,7 @@ class TestBehaveFunctional(TestCase):
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-        ).communicate()[0].strip()
+        ).communicate()[0].decode().strip()
         stdout_lines = stdout.split('\n')
         assert_that(
             stdout_lines[-4],
