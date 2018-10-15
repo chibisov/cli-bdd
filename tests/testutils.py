@@ -4,7 +4,7 @@ import unittest
 from hamcrest import assert_that, equal_to
 
 from cli_bdd.behave import steps as behave_steps_root_module
-from mock import Mock, patch
+from mock import Mock
 
 
 class TestCase(unittest.TestCase):
@@ -80,4 +80,3 @@ class BehaveStepsTestMixin(StepsTestMixin):
         context.text = text
         getattr(self.module, name)(context, **kwargs)
         return context
-

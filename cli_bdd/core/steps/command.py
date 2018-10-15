@@ -18,7 +18,8 @@ from cli_bdd.core.steps.base import StepBase
 
 
 def run(command, fail_on_error=False, interactively=False, timeout=30):
-    child = pexpect.spawn('/bin/sh', ['-c', command], echo=False, encoding='utf-8')
+    child = pexpect.spawn('/bin/sh', ['-c', command], echo=False,
+                          encoding='utf-8')
     child.logfile_read = io.StringIO()
     child.logfile_send = io.StringIO()
     if not interactively:
@@ -189,7 +190,8 @@ class OutputShouldContainText(StepBase):
         # todo: separate stdout and stderr
         # todo: test replace
         # note: unhappy about stripping null characters here.
-        data = child.logfile_read.getvalue().replace('\r\n', '\n').replace('\x00', '')
+        data = child.logfile_read.getvalue().replace('\r\n', '\n') \
+                                            .replace('\x00', '')
         data_lines = data.splitlines()
         if data.endswith('\n'):
             data_lines.append('')
