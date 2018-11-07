@@ -1,6 +1,6 @@
 language: python
 python:
-  - "2.7"
+  - "3.7"
 
 matrix:
   fast_finish: true
@@ -17,8 +17,8 @@ env:
 script:
     - tox -e flake8
     - tox -e isort
-    - tox -e py27
-    - tox -e py27-docs
+    - tox -e py3
+    - tox -e py3-docs
 
 after_success:
     - tox -e deploy-docs
