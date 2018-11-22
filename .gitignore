@@ -3,6 +3,7 @@
 .tox
 .coverage
 __pycache__
+.mypy_cache/
 site/
 dist/
 docs/steps/*

@@ -8,7 +8,7 @@ DECORATORS_BY_TYPES = {
 }
 
 
-class BehaveStepMixin(object):
+class BehaveStepMixin:
     def build_step_func(self):
         decorator = DECORATORS_BY_TYPES[self.type_]
         use_step_matcher('re')

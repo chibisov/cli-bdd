@@ -1,6 +1,6 @@
 
 
-class StepBase(object):
+class StepBase:
     type_ = None  # given, when, then
     sentence = None
     func_name = None

@@ -3,10 +3,10 @@ Feature: showing off cli-bdd
     Scenario: login with CLI
         Given a file "/tmp/login.py" with:
             """
-            login = raw_input('Login: ')
-            password = raw_input('Password: ')
-            print 'Welcome %s!' % login
-            print 'Your password is "%s"' % password
+            login = input('Login: ')
+            password = input('Password: ')
+            print('Welcome {}!'.format(login))
+            print('Your password is "{}"'.format(password))
             """
         When I run `python /tmp/login.py` interactively
         And I got "Login: " for interactive dialog

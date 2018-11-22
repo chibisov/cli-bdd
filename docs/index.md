@@ -21,4 +21,4 @@ Installation:
 $ pip install cli-bdd
 ```
 
-Read the docs how to use `cli-bdd` with [behave](/behave/) and [lettuce](/lettuce/).
+Read the docs how to use `cli-bdd` with [behave](/behave/).

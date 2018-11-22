@@ -6,10 +6,8 @@ from hamcrest import assert_that, equal_to
 
 from cli_bdd.behave.steps import command as behave_command
 from cli_bdd.core.steps.command import base_steps
-from cli_bdd.lettuce.steps import command as lettuce_command
 from testutils import (
     BehaveStepsTestMixin,
-    LettuceStepsTestMixin,
     StepsSentenceRegexTestMixin,
     TestCase
 )
@@ -62,7 +60,7 @@ class CommandStepsMixin(object):
 
     def test_run_command_interactively(self):
         file_path = os.path.join(tempfile.gettempdir(), 'test_interactive.txt')
-        with open(file_path, 'wr') as ff:
+        with open(file_path, 'w+') as ff:
             ff.write('Some text')
 
         context = self.execute_module_step(
@@ -84,7 +82,7 @@ class CommandStepsMixin(object):
 
     def test_type_into_command(self):
         file_path = os.path.join(tempfile.gettempdir(), 'test_interactive.txt')
-        with open(file_path, 'wr') as ff:
+        with open(file_path, 'w+') as ff:
             ff.write('Some text')
 
         context = self.execute_module_step(
@@ -112,7 +110,7 @@ class CommandStepsMixin(object):
 
     def test_got_interactive_dialog(self):
         file_path = os.path.join(tempfile.gettempdir(), 'test_interactive.txt')
-        with open(file_path, 'wr') as ff:
+        with open(file_path, 'w+') as ff:
             ff.write('Some text')
 
         for matcher, valid in (
@@ -717,9 +715,3 @@ class TestCommandBehaveSteps(BehaveStepsTestMixin,
                              CommandStepsMixin,
                              TestCase):
     module = behave_command
-
-
-class TestCommandLettuceSteps(LettuceStepsTestMixin,
-                              CommandStepsMixin,
-                              TestCase):
-    module = lettuce_command

@@ -5,10 +5,8 @@ from hamcrest import assert_that, equal_to, has_entries
 
 from cli_bdd.behave.steps import environment as behave_environment
 from cli_bdd.core.steps.environment import base_steps
-from cli_bdd.lettuce.steps import environment as lettuce_environment
 from testutils import (
     BehaveStepsTestMixin,
-    LettuceStepsTestMixin,
     StepsSentenceRegexTestMixin,
     TestCase
 )
@@ -273,9 +271,3 @@ class TestEnvironmentBehaveSteps(BehaveStepsTestMixin,
                                  EnvironmentStepsMixin,
                                  TestCase):
     module = behave_environment
-
-
-class TestEnvironmentLettuceSteps(LettuceStepsTestMixin,
-                                  EnvironmentStepsMixin,
-                                  TestCase):
-    module = lettuce_environment
