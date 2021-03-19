@@ -3,5 +3,5 @@ pexpect>=4.0.1
 mkdocs==0.15.3
 markdown-include==0.5.1
 invoke==0.12.2
-Jinja2==2.8
+Jinja2==2.11.3
 watchdog==0.8.3
